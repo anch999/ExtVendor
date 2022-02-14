@@ -1,0 +1,27 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+
+<!--@no-lib-strip@-->
+
+
+<Include file="PandaLua\PandaLua_HybridScrollFrame.xml"/>
+<Script file="PandaLua\PandaLua_HybridScrollFrame.lua"/>
+
+<Include file="PandaLua\PandaLua_MerchantFrame.xml"/>
+<Script file="PandaLua\PandaLua_MerchantFrame.lua"/>
+
+<Include file="PandaLua\PandaLua_PandaLua_UIPanelTemplates.xml"/>
+<Script file="PandaLua\PandaLua_PandaLua_UIPanelTemplates.lua"/>
+
+<Include file="PandaLua\PandaLua_UIParent.xml"/>
+<Script file="PandaLua\PandaLua_UIParent.lua"/>
+
+<Include file="PandaLua\PandaLua_SharedUIPanelTemplates.xml"/>
+<Script file="PandaLua\PandaLua_SharedUIPanelTemplates.lua"/>
+
+
+<!--@end-no-lib-strip@-->
+
+
+
+</Ui>
