@@ -4,14 +4,14 @@
 <!--@no-lib-strip@-->
 
 
-<!-- <Include file="PandaLua_HybridScrollFrame.xml"/> -->
+<Include file="ExtVendor_HybridScrollFrame.xml"/>
 <Script file="ExtVendor_HybridScrollFrame.lua"/>
 
-<!-- <Include file="PandaLua_MerchantFrame.xml"/>
-<Script file="PandaLua_MerchantFrame.lua"/> -->
+<Include file="ExtVendor_UIPanelTemplates.xml"/>
+<Script file="ExtVendor_UIPanelTemplates.lua"/>
 
-<!-- <Include file="PandaLua_PandaLua_UIPanelTemplates.xml"/>
-<Script file="PandaLua_PandaLua_UIPanelTemplates.lua"/> -->
+<Include file="ExtVendor_UIDropDownMenu.xml"/>
+<!-- <Script file="ExtVendor_UIPanelTemplates.lua"/> -->
 
 <!-- <Include file="PandaLua_UIParent.xml"/>
 <Script file="PandaLua_UIParent.lua"/> -->
@@ -156,5 +156,7 @@
 			<TexCoords left="0" right="1.0" top="0.03" bottom="0.7175"/>	
 		</HighlightTexture>
 	</Button>
+
+
 
 </Ui>

@@ -110,13 +110,13 @@
             </Layer>
         </Layers>
         <Frames>
-            <ScrollFrame name="$parentItemList" inherits="HybridScrollFrameTemplate">
+            <ScrollFrame name="$parentItemList" inherits="ExtVendor_HybridScrollFrameTemplate">
                 <Size x="413" y="100"/>
                 <Anchors>
                     <Anchor point="TOPLEFT" x="10" y="-10"/>
                 </Anchors>
                 <Frames>
-                    <Slider name="$parentScrollBar" inherits="MinimalHybridScrollBarTemplate">
+                    <Slider name="$parentScrollBar" inherits="ExtVendor_MinimalHybridScrollBarTemplate">
                         <Anchors>
                             <Anchor point="TOPLEFT" relativePoint="TOPRIGHT" x="0" y="-16"/>
                             <Anchor point="BOTTOMLEFT" relativePoint="BOTTOMRIGHT" x="0" y="12"/>

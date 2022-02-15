@@ -689,10 +689,10 @@ function ExtVendor_RebuildMerchantFrame()
     junkBtn:SetScript("OnClick", ExtVendor_StartQuickVendor);
     junkBtn:SetScript("OnEnter", ExtVendor_ShowButtonTooltip);
     junkBtn:SetScript("OnLeave", ExtVendor_HideButtonTooltip);
-    junkBtn:SetPushedTexture("Interface\\AddOns\\ExtVendor\\PandaLua\\InterfaceElements\\UI-Quickslot-Depress");
-    junkBtn:SetHighlightTexture("Interface\\AddOns\\ExtVendor\\PandaLua\\InterfaceElements\\ButtonHilight-Square", "ADD");
+    junkBtn:SetPushedTexture("Interface\\AddOns\\ExtVendor\\InterfaceElements\\UI-Quickslot-Depress");
+    junkBtn:SetHighlightTexture("Interface\\AddOns\\ExtVendor\\InterfaceElements\\ButtonHilight-Square", "ADD");
     junkBtnIcon = junkBtn:CreateTexture("MerchantFrameSellJunkButtonIcon", "BORDER");
-    junkBtnIcon:SetTexture("Interface\\AddOns\\ExtVendor\\PandaLua\\InterfaceElements\\Inv_Misc_Bag_10");
+    junkBtnIcon:SetTexture("Interface\\AddOns\\ExtVendor\\InterfaceElements\\Inv_Misc_Bag_10");
     junkBtnIcon:SetPoint("TOPLEFT", junkBtn, "TOPLEFT", 0, 0);
     junkBtnIcon:SetPoint("BOTTOMRIGHT", junkBtn, "BOTTOMRIGHT", 0, 0);
 
@@ -715,7 +715,7 @@ function ExtVendor_RebuildMerchantFrame()
     --MerchantFrameLootFilter:Hide();
 
     -- filter options dropdown
-    local filterDropdown = CreateFrame("Frame", "MerchantFrameFilterDropDown", UIParent, "UIDropDownMenuTemplate");
+    local filterDropdown = CreateFrame("Frame", "MerchantFrameFilterDropDown", UIParent, "ExtVendor_UIDropDownMenuTemplate");
 
     -- create a new tooltip object for handling item tooltips in the background
     evTooltip = CreateFrame("GameTooltip", "ExtVendorHiddenTooltip", UIParent, "GameTooltipTemplate");
@@ -847,7 +847,7 @@ function ExtVendor_InitQualityFilter()
             info.value = i;
             info.checked = nil;
             info.func = ExtVendor_SelectFilterQuality;
-            UIDropDownMenu_AddButton(info);
+            ExtVendor_UIDropDownMenu_AddButton(info);
         end
     end
 
@@ -858,7 +858,7 @@ end
 --========================================
 function ExtVendor_SelectFilterQuality(self)
 
-    UIDropDownMenu_SetSelectedValue(MerchantFrameQualityFilter, self.value);
+    ExtVendor_UIDropDownMenu_SetSelectedValue(MerchantFrameQualityFilter, self.value);
     EXTVENDOR_SELECTED_QUALITY = self.value;
 
     ExtVendor_UpdateDisplay();
@@ -951,7 +951,7 @@ function ExtVendor_DisplayFilterDropDown(self)
                 { text = ITEM_QUALITY_COLORS[7].hex .. ITEM_QUALITY7_DESC, checked = (EXTVENDOR_SELECTED_QUALITY == 7), func = function() ExtVendor_SetSpecificQuality(7); end },
             },
         },
-        { text = L["STOCK_FILTER"], hasArrow = true, notCheckable = true, menuList = stockFilters },
+    --    { text = L["STOCK_FILTER"], hasArrow = true, notCheckable = true, menuList = stockFilters },
         { text = L["CONFIGURE_QUICKVENDOR"], notCheckable = true, func = function() ExtVendor_QVConfigFrame:Show(); end },
     };
     EasyMenu(menu, MerchantFrameFilterDropDown, self, 0, 0, "MENU", 1);
