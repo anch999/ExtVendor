@@ -1,31 +1,18 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\FrameXML\UI.xsd">
 
-<!-- 	<Texture name="PandaLua_UIPanelButtonUpTexture" file="PandaLua\InterfaceElements\UI-Panel-Button-Up" virtual="true">
-		<TexCoords left="0" right="0.625" top="0" bottom="0.6875"/>
-	</Texture>
-	<Texture name="PandaLua_UIPanelButtonDownTexture" file="PandaLua\InterfaceElements\UI-Panel-Button-Down" virtual="true">
-		<TexCoords left="0" right="0.625" top="0" bottom="0.6875"/>
-	</Texture>
-	<Texture name="PandaLua_UIPanelButtonDisabledTexture" file="PandaLua\InterfaceElements\UI-Panel-Button-Disabled" virtual="true">
-		<TexCoords left="0" right="0.625" top="0" bottom="0.6875"/>
-	</Texture>
-	<Texture name="PandaLua_UIPanelButtonDisabledDownTexture" file="PandaLua\InterfaceElements\UI-Panel-Button-Disabled-Down" virtual="true">
-		<TexCoords left="0" right="0.625" top="0" bottom="0.6875"/>
-	</Texture> -->
-
     <Button name="ExtVendor_BlacklistedItemButtonTemplate" virtual="true">
         <Size>
             <AbsDimension x="400" y="20"/>
         </Size>
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture name="$parentSelection" file="PandaLua\InterfaceElements\UI-QuestLogTitleHighlight" alphaMode="ADD" hidden="true">
+                <Texture name="$parentSelection" file="Interface\AddOns\ExtVendor\InterfaceElements\UI-QuestLogTitleHighlight" alphaMode="ADD" hidden="true">
                     <Color r="1" g="0.8" b="0" a="0.7"/>
                 </Texture>
             </Layer>
             <Layer level="ARTWORK">
-                <Texture name="$parentIcon" file="Interface\\AddOns\\ExtVendor\\InterfaceElements\\INV_Misc_QuestionMark">
+                <Texture name="$parentIcon" file="Interface/Icons/INV_Misc_QuestionMark">
                     <Size>
                         <AbsDimension x="18" y="18"/>
                     </Size>
@@ -55,7 +42,7 @@
                 ExtVendor_QVConfig_SelectItemListButton(self);
             </OnClick>
         </Scripts>
-		<HighlightTexture file="PandaLua\InterfaceElements\UI-QuestLogTitleHighlight" alphaMode="ADD">
+		<HighlightTexture file="Interface\AddOns\ExtVendor\InterfaceElements\UI-QuestLogTitleHighlight" alphaMode="ADD">
 			<Anchors>
 				<Anchor point="TOPLEFT">	
 					<Offset>
@@ -101,7 +88,7 @@
 
     <Frame name="ExtVendor_ItemListTemplate" virtual="true">
         <Size x="430" y="120"/>
-        <Backdrop bgFile="PandaLua\InterfaceElements\UI-DialogBox-Background" edgeFile="PandaLua\InterfaceElements\UI-Tooltip-Border" tile="true">
+        <Backdrop bgFile="Interface\AddOns\ExtVendor\InterfaceElements\UI-DialogBox-Background" edgeFile="Interface\AddOns\ExtVendor\InterfaceElements\UI-Tooltip-Border" tile="true">
             <EdgeSize>
                 <AbsValue val="16"/>
             </EdgeSize>
@@ -123,13 +110,13 @@
             </Layer>
         </Layers>
         <Frames>
-            <ScrollFrame name="$parentItemList" inherits="PandaLua_HybridScrollFrameTemplate">
+            <ScrollFrame name="$parentItemList" inherits="HybridScrollFrameTemplate">
                 <Size x="413" y="100"/>
                 <Anchors>
                     <Anchor point="TOPLEFT" x="10" y="-10"/>
                 </Anchors>
                 <Frames>
-                    <Slider name="$parentScrollBar" inherits="PandaLua_MinimalHybridScrollBarTemplate">
+                    <Slider name="$parentScrollBar" inherits="MinimalHybridScrollBarTemplate">
                         <Anchors>
                             <Anchor point="TOPLEFT" relativePoint="TOPRIGHT" x="0" y="-16"/>
                             <Anchor point="BOTTOMLEFT" relativePoint="BOTTOMRIGHT" x="0" y="12"/>

@@ -90,7 +90,7 @@ function ExtVendor_QVConfig_OnLoad(self)
 
     ExtVendor_QVConfigFrame_BlacklistItemList.update = ExtVendor_QVConfig_Blacklist_Update;
     ExtVendor_QVConfigFrame_BlacklistItemList.deleteButton = ExtVendor_QVConfigFrame_RemoveFromBlacklistButton;
-    PandaLua_HybridScrollFrame_CreateButtons(ExtVendor_QVConfigFrame_BlacklistItemList, "ExtVendor_BlacklistedItemButtonTemplate", 0, 0);
+    ExtVendor_HybridScrollFrame_CreateButtons(ExtVendor_QVConfigFrame_BlacklistItemList, "ExtVendor_BlacklistedItemButtonTemplate", 0, 0);
 
     -- set up global whitelist
     ExtVendor_QVConfigFrame_GlobalWhitelistItemListScrollBar.Show =
@@ -113,7 +113,7 @@ function ExtVendor_QVConfig_OnLoad(self)
     ExtVendor_QVConfigFrame_ItemDropGlobalWhitelistButton.isWhitelist = true;
     ExtVendor_QVConfigFrame_GlobalWhitelistItemList.update = ExtVendor_QVConfig_GlobalWhitelist_Update;
     ExtVendor_QVConfigFrame_GlobalWhitelistItemList.deleteButton = ExtVendor_QVConfigFrame_RemoveFromGlobalWhitelistButton;
-    PandaLua_HybridScrollFrame_CreateButtons(ExtVendor_QVConfigFrame_GlobalWhitelistItemList, "ExtVendor_BlacklistedItemButtonTemplate", 0, 0);
+    ExtVendor_HybridScrollFrame_CreateButtons(ExtVendor_QVConfigFrame_GlobalWhitelistItemList, "ExtVendor_BlacklistedItemButtonTemplate", 0, 0);
 
     -- set up local whitelist
     ExtVendor_QVConfigFrame_LocalWhitelistItemListScrollBar.Show =
@@ -137,7 +137,7 @@ function ExtVendor_QVConfig_OnLoad(self)
     ExtVendor_QVConfigFrame_ItemDropLocalWhitelistButton.isLocal = true;
     ExtVendor_QVConfigFrame_LocalWhitelistItemList.update = ExtVendor_QVConfig_LocalWhitelist_Update;
     ExtVendor_QVConfigFrame_LocalWhitelistItemList.deleteButton = ExtVendor_QVConfigFrame_RemoveFromLocalWhitelistButton;
-    PandaLua_HybridScrollFrame_CreateButtons(ExtVendor_QVConfigFrame_LocalWhitelistItemList, "ExtVendor_BlacklistedItemButtonTemplate", 0, 0);
+    ExtVendor_HybridScrollFrame_CreateButtons(ExtVendor_QVConfigFrame_LocalWhitelistItemList, "ExtVendor_BlacklistedItemButtonTemplate", 0, 0);
 
 end
 
@@ -177,7 +177,7 @@ end
 function ExtVendor_QVConfig_Blacklist_Update()
 
     local scrollFrame = ExtVendor_QVConfigFrame_BlacklistItemList;
-	local offset = PandaLua_HybridScrollFrame_GetOffset(scrollFrame);
+	local offset = ExtVendor_HybridScrollFrame_GetOffset(scrollFrame);
 	local buttons = scrollFrame.buttons;
 	local numButtons = #buttons;
     local numBlacklisted = table.maxn(EXTVENDOR_DATA['quickvendor_blacklist']);
@@ -205,14 +205,14 @@ function ExtVendor_QVConfig_Blacklist_Update()
 
     local totalHeight = numBlacklisted * 20;
 
-	PandaLua_HybridScrollFrame_Update(scrollFrame, totalHeight, displayedHeight);
+	ExtVendor_HybridScrollFrame_Update(scrollFrame, totalHeight, displayedHeight);
 
 end
 
 function ExtVendor_QVConfig_GlobalWhitelist_Update()
 
     local scrollFrame = ExtVendor_QVConfigFrame_GlobalWhitelistItemList;
-	local offset = PandaLua_HybridScrollFrame_GetOffset(scrollFrame);
+	local offset = ExtVendor_HybridScrollFrame_GetOffset(scrollFrame);
 	local buttons = scrollFrame.buttons;
 	local numButtons = #buttons;
     local numBlacklisted = table.maxn(EXTVENDOR_DATA['quickvendor_whitelist']);
@@ -240,14 +240,14 @@ function ExtVendor_QVConfig_GlobalWhitelist_Update()
 
     local totalHeight = numBlacklisted * 20;
 
-	PandaLua_HybridScrollFrame_Update(scrollFrame, totalHeight, displayedHeight);
+	ExtVendor_HybridScrollFrame_Update(scrollFrame, totalHeight, displayedHeight);
 
 end
 
 function ExtVendor_QVConfig_LocalWhitelist_Update()
 
     local scrollFrame = ExtVendor_QVConfigFrame_LocalWhitelistItemList;
-	local offset = PandaLua_HybridScrollFrame_GetOffset(scrollFrame);
+	local offset = ExtVendor_HybridScrollFrame_GetOffset(scrollFrame);
 	local buttons = scrollFrame.buttons;
 	local numButtons = #buttons;
     local numBlacklisted = table.maxn(EXTVENDOR_DATA[EXTVENDOR_PROFILE]['quickvendor_whitelist']);
@@ -275,7 +275,7 @@ function ExtVendor_QVConfig_LocalWhitelist_Update()
 
     local totalHeight = numBlacklisted * 20;
 
-	PandaLua_HybridScrollFrame_Update(scrollFrame, totalHeight, displayedHeight);
+	ExtVendor_HybridScrollFrame_Update(scrollFrame, totalHeight, displayedHeight);
 
 end
 

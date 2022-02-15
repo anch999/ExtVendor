@@ -87,7 +87,6 @@ function ExtVendor_OnShow(self)
     end ]]
     ExtVendor_SetMinimumQuality(0);
     ExtVendor_SetSlotFilter(0);
-
 end
 
 --========================================
@@ -654,7 +653,7 @@ function ExtVendor_RebuildMerchantFrame()
 
     -- alter the position of the buyback item slot on the merchant tab
     MerchantBuyBackItem:ClearAllPoints();
-    MerchantBuyBackItem:SetPoint("TOPLEFT", MerchantItem10, "BOTTOMLEFT", -14, -20);
+    MerchantBuyBackItem:SetPoint("TOPLEFT", MerchantItem10, "BOTTOMLEFT", -0, -20);
 
     -- move the next/previous page buttons
     MerchantPrevPageButton:ClearAllPoints();
@@ -685,20 +684,20 @@ function ExtVendor_RebuildMerchantFrame()
     local junkBtn = CreateFrame("Button", "MerchantFrameSellJunkButton", MerchantFrame);
     junkBtn:SetWidth(32);
     junkBtn:SetHeight(32);
-    junkBtn:SetPoint("TOPLEFT", MerchantFrame, "TOPLEFT", 70, -27);
+    junkBtn:SetPoint("TOPLEFT", MerchantFrame, "TOPLEFT", 80, -38);
     junkBtn.tooltip = L["QUICKVENDOR_BUTTON_TOOLTIP"];
     junkBtn:SetScript("OnClick", ExtVendor_StartQuickVendor);
     junkBtn:SetScript("OnEnter", ExtVendor_ShowButtonTooltip);
     junkBtn:SetScript("OnLeave", ExtVendor_HideButtonTooltip);
-    junkBtn:SetPushedTexture("Interface\\AddOns\\ExtVendor\\InterfaceElements\\UI-Quickslot-Depress");
-    junkBtn:SetHighlightTexture("Interface\\AddOns\\ExtVendor\\InterfaceElements\\ButtonHilight-Square", "ADD");
+    junkBtn:SetPushedTexture("Interface\\AddOns\\ExtVendor\\PandaLua\\InterfaceElements\\UI-Quickslot-Depress");
+    junkBtn:SetHighlightTexture("Interface\\AddOns\\ExtVendor\\PandaLua\\InterfaceElements\\ButtonHilight-Square", "ADD");
     junkBtnIcon = junkBtn:CreateTexture("MerchantFrameSellJunkButtonIcon", "BORDER");
-    junkBtnIcon:SetTexture("Interface\\AddOns\\ExtVendor\\InterfaceElementsInv_Misc_Bag_10");
+    junkBtnIcon:SetTexture("Interface\\AddOns\\ExtVendor\\PandaLua\\InterfaceElements\\Inv_Misc_Bag_10");
     junkBtnIcon:SetPoint("TOPLEFT", junkBtn, "TOPLEFT", 0, 0);
     junkBtnIcon:SetPoint("BOTTOMRIGHT", junkBtn, "BOTTOMRIGHT", 0, 0);
 
     -- filter button
-    local filterBtn = CreateFrame("Button", "MerchantFrameFilterButton", MerchantFrame, "PandaLua_UIButtonStretchTemplate");
+   local filterBtn = CreateFrame("Button", "MerchantFrameFilterButton", MerchantFrame, "PandaLua_UIButtonStretchTemplate");
     filterBtn:SetText(FILTER);
     filterBtn:SetPoint("RIGHT", MerchantFrameSearchBox, "LEFT", -30, 0);
     filterBtn:SetWidth(80);

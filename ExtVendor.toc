@@ -9,7 +9,7 @@
 lib\LibStub.lua
 lib\AceLocale-3.0.lua
 
-PandaLua\embeds.xml
+embeds.xml
 
 locale\enUS.lua
 
