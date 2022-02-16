@@ -239,7 +239,7 @@ function ExtVendor_HybridScrollFrame_CreateButtons (self, buttonTemplate, initia
 	scrollBar:SetMinMaxValues(0, numButtons * buttonHeight)
 	scrollBar.buttonHeight = buttonHeight;
 	scrollBar:SetValueStep(buttonHeight);
-	scrollBar:SetStepsPerPage(numButtons - 2); -- one additional button was added above. Need to remove that, and one more to make the current bottom the new top (and vice versa)
+	--scrollBar:SetStepsPerPage(numButtons - 2); -- one additional button was added above. Need to remove that, and one more to make the current bottom the new top (and vice versa)
 	scrollBar:SetValue(0);
 
 end

@@ -305,7 +305,7 @@ end
 function ExtVendor_QVConfig_ShowBlacklistedItemTooltip(button)
     if (not button.itemID) then return; end
     GameTooltip:SetOwner(button, "ANCHOR_BOTTOMLEFT", 0, 20);
-    GameTooltip:SetItemByID(button.itemID);
+   -- GameTooltip:SetItemByID(button.itemID);
 end
 
 function ExtVendor_QVConfig_SelectItemListButton(self)

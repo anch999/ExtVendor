@@ -1,11 +1,11 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\FrameXML\UI.xsd">
-<Slider name="UIPanelScrollBarTemplate" virtual="true">
+<Slider name="ExtVendor_UIPanelScrollBarTemplate" virtual="true">
 		<Size>
 			<AbsDimension x="16" y="0"/>
 		</Size>
 		<Frames>
-			<Button name="$parentScrollUpButton" inherits="UIPanelScrollUpButtonTemplate">
+			<Button name="$parentScrollUpButton" inherits="ExtVendor_UIPanelScrollUpButtonTemplate">
 				<Anchors>
 					<Anchor point="BOTTOM" relativePoint="TOP"/>
 				</Anchors>
@@ -17,7 +17,7 @@
 					</OnClick>
 				</Scripts>
 			</Button>
-			<Button name="$parentScrollDownButton" inherits="UIPanelScrollDownButtonTemplate">
+			<Button name="$parentScrollDownButton" inherits="ExtVendor_UIPanelScrollDownButtonTemplate">
 				<Anchors>
 					<Anchor point="TOP" relativePoint="BOTTOM"/>
 				</Anchors>
@@ -42,12 +42,12 @@
 			<TexCoords left="0.20" right="0.80" top="0.125" bottom="0.875"/>
 		</ThumbTexture>
 	</Slider>
-	<Slider name="UIPanelScrollBarTemplateLightBorder" virtual="true">
+	<Slider name="ExtVendor_UIPanelScrollBarTemplateLightBorder" virtual="true">
 		<Size>
 			<AbsDimension x="16" y="0"/>
 		</Size>
 		<Frames>
-			<Button name="$parentScrollUpButton" inherits="UIPanelScrollUpButtonTemplate">
+			<Button name="$parentScrollUpButton" inherits="ExtVendor_UIPanelScrollUpButtonTemplate">
 				<Anchors>
 					<Anchor point="BOTTOM" relativePoint="TOP"/>
 				</Anchors>
@@ -59,7 +59,7 @@
 					</OnClick>
 				</Scripts>
 			</Button>
-			<Button name="$parentScrollDownButton" inherits="UIPanelScrollDownButtonTemplate">
+			<Button name="$parentScrollDownButton" inherits="ExtVendor_UIPanelScrollDownButtonTemplate">
 				<Anchors>
 					<Anchor point="TOP" relativePoint="BOTTOM"/>
 				</Anchors>
@@ -115,7 +115,7 @@
 	</Slider>
 	<ScrollFrame name="UIPanelScrollFrameTemplate" virtual="true">
 		<Frames>
-			<Slider name="$parentScrollBar" parentKey="ScrollBar" inherits="UIPanelScrollBarTemplate">
+			<Slider name="$parentScrollBar" parentKey="ScrollBar" inherits="ExtVendor_UIPanelScrollBarTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativePoint="TOPRIGHT">
 						<Offset>
@@ -207,7 +207,7 @@
 	</ScrollFrame>
 	<ScrollFrame name="FauxScrollFrameTemplateLight" virtual="true">
 		<Frames>
-			<Slider name="$parentScrollBar" inherits="UIPanelScrollBarTemplateLightBorder">
+			<Slider name="$parentScrollBar" inherits="ExtVendor_UIPanelScrollBarTemplateLightBorder">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativePoint="TOPRIGHT">
 						<Offset>
@@ -259,7 +259,7 @@
 		</ScrollChild>
 	</ScrollFrame>
 
-    <Button name="UIPanelScrollUpButtonTemplate" virtual="true">
+    <Button name="ExtVendor_UIPanelScrollUpButtonTemplate" virtual="true">
 		<Size>
 			<AbsDimension x="18" y="16"/>
 		</Size>
@@ -268,7 +268,7 @@
 		<DisabledTexture inherits="UIPanelScrollBarButton" file="Interface\AddOns\ExtVendor\InterfaceElements\UI-ScrollBar-ScrollUpButton-Disabled"/>
 		<HighlightTexture inherits="UIPanelScrollBarButton" file="Interface\AddOns\ExtVendor\InterfaceElements\UI-ScrollBar-ScrollUpButton-Highlight" alphaMode="ADD"/>
 	</Button>
-	<Button name="UIPanelScrollDownButtonTemplate" virtual="true">
+	<Button name="ExtVendor_UIPanelScrollDownButtonTemplate" virtual="true">
 		<Size>
 			<AbsDimension x="18" y="16"/>
 		</Size>
@@ -277,12 +277,12 @@
 		<DisabledTexture inherits="UIPanelScrollBarButton" file="Interface\AddOns\ExtVendor\InterfaceElements\UI-ScrollBar-ScrollDownButton-Disabled"/>
 		<HighlightTexture inherits="UIPanelScrollBarButton" file="Interface\AddOns\ExtVendor\InterfaceElements\UI-ScrollBar-ScrollDownButton-Highlight" alphaMode="ADD"/>
 	</Button>
-	<Slider name="UIPanelScrollBarTemplate" virtual="true">
+	<Slider name="ExtVendor_UIPanelScrollBarTemplate" virtual="true">
 		<Size>
 			<AbsDimension x="16" y="0"/>
 		</Size>
 		<Frames>
-			<Button name="$parentScrollUpButton" parentKey="ScrollUpButton" inherits="UIPanelScrollUpButtonTemplate">
+			<Button name="$parentScrollUpButton" parentKey="ScrollUpButton" inherits="ExtVendor_UIPanelScrollUpButtonTemplate">
 				<Anchors>
 					<Anchor point="BOTTOM" relativePoint="TOP"/>
 				</Anchors>
@@ -295,7 +295,7 @@
 					</OnClick>
 				</Scripts>
 			</Button>
-			<Button name="$parentScrollDownButton" parentKey="ScrollDownButton" inherits="UIPanelScrollDownButtonTemplate">
+			<Button name="$parentScrollDownButton" parentKey="ScrollDownButton" inherits="ExtVendor_UIPanelScrollDownButtonTemplate">
 				<Anchors>
 					<Anchor point="TOP" relativePoint="BOTTOM"/>
 				</Anchors>
@@ -368,7 +368,7 @@
 			</Layer>	
 		</Layers>
 		<Frames>
-			<Button name="$parentScrollUpButton" inherits="UIPanelScrollUpButtonTemplate">
+			<Button name="$parentScrollUpButton" inherits="ExtVendor_UIPanelScrollUpButtonTemplate">
 				<Anchors>
 					<Anchor point="BOTTOM" relativePoint="TOP" x="0" y="-2"/>
 				</Anchors>
@@ -381,7 +381,7 @@
 					</OnClick>
 				</Scripts>
 			</Button>
-			<Button name="$parentScrollDownButton" inherits="UIPanelScrollDownButtonTemplate">
+			<Button name="$parentScrollDownButton" inherits="ExtVendor_UIPanelScrollDownButtonTemplate">
 				<Anchors>
 					<Anchor point="TOP" relativePoint="BOTTOM" x="0" y="2"/>
 				</Anchors>
@@ -407,12 +407,12 @@
 			<TexCoords left="0.20" right="0.80" top="0.125" bottom="0.875"/>
 		</ThumbTexture>
 	</Slider>
-	<Slider name="UIPanelScrollBarTemplateLightBorder" virtual="true">
+	<Slider name="ExtVendor_UIPanelScrollBarTemplateLightBorder" virtual="true">
 		<Size>
 			<AbsDimension x="16" y="0"/>
 		</Size>
 		<Frames>
-			<Button name="$parentScrollUpButton" inherits="UIPanelScrollUpButtonTemplate">
+			<Button name="$parentScrollUpButton" inherits="ExtVendor_UIPanelScrollUpButtonTemplate">
 				<Anchors>
 					<Anchor point="BOTTOM" relativePoint="TOP"/>
 				</Anchors>
@@ -424,7 +424,7 @@
 					</OnClick>
 				</Scripts>
 			</Button>
-			<Button name="$parentScrollDownButton" inherits="UIPanelScrollDownButtonTemplate">
+			<Button name="$parentScrollDownButton" inherits="ExtVendor_UIPanelScrollDownButtonTemplate">
 				<Anchors>
 					<Anchor point="TOP" relativePoint="BOTTOM"/>
 				</Anchors>
@@ -494,7 +494,7 @@
 			</Layer>
 		</Layers>
 		<Frames>
-			<Button name="$parentScrollUpButton" inherits="UIPanelScrollUpButtonTemplate">
+			<Button name="$parentScrollUpButton" inherits="ExtVendor_UIPanelScrollUpButtonTemplate">
 				<Anchors>
 					<Anchor point="TOP" x="0" y="15"/>
 				</Anchors>
@@ -507,7 +507,7 @@
 					</OnClick>
 				</Scripts>
 			</Button>
-			<Button name="$parentScrollDownButton" inherits="UIPanelScrollDownButtonTemplate">
+			<Button name="$parentScrollDownButton" inherits="ExtVendor_UIPanelScrollDownButtonTemplate">
 				<Anchors>
 					<Anchor point="BOTTOM" x="0" y="-15"/>
 				</Anchors>
