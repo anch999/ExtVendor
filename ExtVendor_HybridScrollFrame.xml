@@ -41,7 +41,7 @@
 			</Layer>	
 		</Layers>
 		<Frames>
-			<Button name="$parentScrollUpButton" inherits="ExtVendor_UIPanelScrollUpButtonTemplate">
+			<Button name="$parentScrollUpButton" inherits="UIPanelScrollUpButtonTemplate">
 				<Anchors>
 					<Anchor point="BOTTOM" relativePoint="TOP" x="0" y="-2"/>
 				</Anchors>
@@ -50,7 +50,7 @@
 					<OnClick function ="ExtVendor_HybridScrollFrameScrollButton_OnClick"/>
 				</Scripts>
 			</Button>
-			<Button name="$parentScrollDownButton" inherits="ExtVendor_UIPanelScrollDownButtonTemplate">
+			<Button name="$parentScrollDownButton" inherits="UIPanelScrollDownButtonTemplate">
 				<Anchors>
 					<Anchor point="TOP" relativePoint="BOTTOM" x="0" y="2"/>
 				</Anchors>
@@ -102,7 +102,7 @@
 			</Layer>	
 		</Layers>
 		<Frames>
-			<Button name="$parentScrollUpButton" inherits="ExtVendor_UIPanelScrollUpButtonTemplate">
+			<Button name="$parentScrollUpButton" inherits="UIPanelScrollUpButtonTemplate">
 				<Anchors>
 					<Anchor point="BOTTOM" relativePoint="TOP" x="0" y="-2"/>
 				</Anchors>
@@ -111,7 +111,7 @@
 					<OnClick  function="ExtVendor_HybridScrollFrameScrollButton_OnClick"/>
 				</Scripts>
 			</Button>
-			<Button name="$parentScrollDownButton" inherits="ExtVendor_UIPanelScrollDownButtonTemplate">
+			<Button name="$parentScrollDownButton" inherits="UIPanelScrollDownButtonTemplate">
 				<Anchors>
 					<Anchor point="TOP" relativePoint="BOTTOM" x="0" y="2"/>
 				</Anchors>
@@ -144,7 +144,7 @@
 			</Layer>
 		</Layers>
 		<Frames>
-			<Button name="$parentScrollUpButton" inherits="ExtVendor_UIPanelScrollUpButtonTemplate">
+			<Button name="$parentScrollUpButton" inherits="UIPanelScrollUpButtonTemplate">
 				<Anchors>
 					<Anchor point="TOP" x="0" y="15"/>
 				</Anchors>
@@ -153,7 +153,7 @@
 					<OnClick function="ExtVendor_HybridScrollFrameScrollButton_OnClick"/>
 				</Scripts>
 			</Button>
-			<Button name="$parentScrollDownButton" inherits="ExtVendor_UIPanelScrollDownButtonTemplate">
+			<Button name="$parentScrollDownButton" inherits="UIPanelScrollDownButtonTemplate">
 				<Anchors>
 					<Anchor point="BOTTOM" x="0" y="-15"/>
 				</Anchors>

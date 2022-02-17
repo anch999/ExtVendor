@@ -633,8 +633,8 @@ end
 function ExtVendor_RebuildMerchantFrame()
 
     -- set the new width of the frame
-    MerchantFrame:SetWidth(720);
-
+    MerchantFrame:SetWidth(736);
+    
     -- create new item buttons as needed
     for i = 1, MERCHANT_ITEMS_PER_PAGE, 1 do
         if (not _G["MerchantItem" .. i]) then
@@ -647,9 +647,6 @@ function ExtVendor_RebuildMerchantFrame()
     -- retexture the border element around the repair/buyback spots on the merchant tab
     MerchantFrameBottomLeftBorder:SetTexture("Interface\\AddOns\\ExtVendor\\textures\\bottomborder");
     MerchantFrameBottomRightBorder:SetTexture("Interface\\AddOns\\ExtVendor\\textures\\bottomborder");
-
-    
-    
 
     -- alter the position of the buyback item slot on the merchant tab
     MerchantBuyBackItem:ClearAllPoints();
@@ -664,13 +661,12 @@ function ExtVendor_RebuildMerchantFrame()
     MerchantNextPageButton:SetPoint("CENTER", MerchantFrame, "BOTTOM", 290, 110);
 
     -- currency insets
---[[     MerchantExtraCurrencyInset:ClearAllPoints();
+    --[[ MerchantExtraCurrencyInset:ClearAllPoints();
     MerchantExtraCurrencyInset:SetPoint("BOTTOMRIGHT", MerchantMoneyInset, "BOTTOMLEFT", 0, 0);
     MerchantExtraCurrencyInset:SetPoint("TOPLEFT", MerchantMoneyInset, "TOPLEFT", -165, 0);
     MerchantExtraCurrencyBg:ClearAllPoints();
     MerchantExtraCurrencyBg:SetPoint("TOPLEFT", MerchantExtraCurrencyInset, "TOPLEFT", 3, -2);
     MerchantExtraCurrencyBg:SetPoint("BOTTOMRIGHT", MerchantExtraCurrencyInset, "BOTTOMRIGHT", -3, 2); ]]
-
     -- add the search box
     local editbox = CreateFrame("EditBox", "MerchantFrameSearchBox", MerchantFrame, "EV_SearchBoxTemplate");
     editbox:SetWidth(200);
@@ -697,7 +693,7 @@ function ExtVendor_RebuildMerchantFrame()
     junkBtnIcon:SetPoint("BOTTOMRIGHT", junkBtn, "BOTTOMRIGHT", 0, 0);
 
     -- filter button
-   local filterBtn = CreateFrame("Button", "MerchantFrameFilterButton", MerchantFrame, "PandaLua_UIButtonStretchTemplate");
+   local filterBtn = CreateFrame("Button", "MerchantFrameFilterButton", MerchantFrame, "ExtVendor_UIButtonStretchTemplate");
     filterBtn:SetText(FILTER);
     filterBtn:SetPoint("RIGHT", MerchantFrameSearchBox, "LEFT", -30, 0);
     filterBtn:SetWidth(80);
@@ -715,7 +711,7 @@ function ExtVendor_RebuildMerchantFrame()
     --MerchantFrameLootFilter:Hide();
 
     -- filter options dropdown
-    local filterDropdown = CreateFrame("Frame", "MerchantFrameFilterDropDown", UIParent, "ExtVendor_UIDropDownMenuTemplate");
+    local filterDropdown = CreateFrame("Frame", "MerchantFrameFilterDropDown", UIParent, "UIDropDownMenuTemplate");
 
     -- create a new tooltip object for handling item tooltips in the background
     evTooltip = CreateFrame("GameTooltip", "ExtVendorHiddenTooltip", UIParent, "GameTooltipTemplate");

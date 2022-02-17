@@ -84,6 +84,6 @@
                 ExtVendor_OnEvent(self, event, ...);
             </OnEvent>
         </Scripts>
-    </Frame>
+    </Frame>   
     
 </Ui>
