@@ -80,7 +80,6 @@ end
 -- Hooked merchant frame OnShow
 --========================================
 function ExtVendor_OnShow(self)
-
     MerchantFrameSearchBox:SetText("");
  --[[    if (EXTVENDOR_DATA['config']['stockfilter_defall']) then
         SetMerchantFilter(LE_LOOT_FILTER_ALL);
@@ -218,7 +217,7 @@ function ExtVendor_UpdateButtonPositions(isBuyBack)
             btn:Show();
             if ((i % EXTVENDOR_ITEMS_PER_SUBPAGE) == 1) then
                 if (i == 1) then
-                    btn:SetPoint("TOPLEFT", MerchantFrame, "TOPLEFT", 24, -80);
+                    btn:SetPoint("TOPLEFT", MerchantFrame, "TOPLEFT", 34, -82);
                 else
                     btn:SetPoint("TOPLEFT", _G["MerchantItem" .. (i - (EXTVENDOR_ITEMS_PER_SUBPAGE - 1))], "TOPRIGHT", 12, 0);
                 end
@@ -609,7 +608,9 @@ function ExtVendor_UpdateBuybackInfo()
     ExtVendor_UpdateButtonPositions(true);
     --BuybackFrameTopMid:Show();
     --BuybackFrameBotMid:Show();
-
+    -- local topmiddleleft = MerchantFrame:CreateTexture(nil, "BACKGROUND");
+    -- topmiddleleft:SetPoint("TOP", MerchantFrame, "TOP", 0, 0);
+    -- topmiddleleft:SetTexture("Interface\\AddOns\\ExtVendor\\textures\\UI-Merchant-TopLeftwide");
     -- apply coloring
     local btn, link, quality, r, g, b;
     for i = 1, BUYBACK_ITEMS_PER_PAGE, 1 do
@@ -633,8 +634,21 @@ end
 function ExtVendor_RebuildMerchantFrame()
 
     -- set the new width of the frame
+    if ExtVendor_LastPos then
+    MerchantFrame:SetPoint(ExtVendor_LastPos);
+    end
     MerchantFrame:SetWidth(736);
-    
+    MerchantFrame:RegisterForDrag("LeftButton");
+    MerchantFrame:SetScript("OnDragStart", function ()
+        MerchantFrame:StartMoving();
+        MerchantFrame.isMoving = true;
+    end)
+    MerchantFrame:SetMovable(true);
+    MerchantFrame:SetScript("OnDragStop", function ()
+        MerchantFrame:StopMovingOrSizing();
+        ExtVendor_LastPos = MerchantFrame:GetPoint();
+        MerchantFrame.isMoving = false;
+    end)
     -- create new item buttons as needed
     for i = 1, MERCHANT_ITEMS_PER_PAGE, 1 do
         if (not _G["MerchantItem" .. i]) then
@@ -648,9 +662,17 @@ function ExtVendor_RebuildMerchantFrame()
     MerchantFrameBottomLeftBorder:SetTexture("Interface\\AddOns\\ExtVendor\\textures\\bottomborder");
     MerchantFrameBottomRightBorder:SetTexture("Interface\\AddOns\\ExtVendor\\textures\\bottomborder");
 
+    local topmiddleleft = MerchantFrame:CreateTexture(nil, "BACKGROUND");
+    topmiddleleft:SetPoint("TOP", MerchantFrame, "TOP", 0, 0);
+    topmiddleleft:SetTexture("Interface\\AddOns\\ExtVendor\\textures\\UI-Merchant-TopLeftwide");
+
+    local botmiddleleft = MerchantFrame:CreateTexture(nil, "BACKGROUND");
+    botmiddleleft:SetPoint("BOTTOM", MerchantFrame, "BOTTOM", 0, 0);
+    botmiddleleft:SetTexture("Interface\\AddOns\\ExtVendor\\textures\\UI-AuctionFrame-Auction-Bottom");
+
     -- alter the position of the buyback item slot on the merchant tab
     MerchantBuyBackItem:ClearAllPoints();
-    MerchantBuyBackItem:SetPoint("TOPLEFT", MerchantItem10, "BOTTOMLEFT", -0, -20);
+    MerchantBuyBackItem:SetPoint("TOPLEFT", MerchantItem10, "BOTTOMLEFT", -11, -18.5);
 
     -- move the next/previous page buttons
     MerchantPrevPageButton:ClearAllPoints();
@@ -659,12 +681,12 @@ function ExtVendor_RebuildMerchantFrame()
     MerchantPageText:SetPoint("BOTTOM", MerchantFrame, "BOTTOM", 160, 105);
     MerchantNextPageButton:ClearAllPoints();
     MerchantNextPageButton:SetPoint("CENTER", MerchantFrame, "BOTTOM", 290, 110);
-
     -- currency insets
-    --[[ MerchantExtraCurrencyInset:ClearAllPoints();
-    MerchantExtraCurrencyInset:SetPoint("BOTTOMRIGHT", MerchantMoneyInset, "BOTTOMLEFT", 0, 0);
-    MerchantExtraCurrencyInset:SetPoint("TOPLEFT", MerchantMoneyInset, "TOPLEFT", -165, 0);
-    MerchantExtraCurrencyBg:ClearAllPoints();
+    -- MerchantFrameAltCurrencyFrame:ClearAllPoints();
+    -- MerchantFrameAltCurrencyFrame:SetPoint("BOTTOMRIGHT", "MerchantItem"..i.."NameFrame", "BOTTOMLEFT", 0, 0);
+    --merchantAltCurrency:Show();
+
+    --[[ MerchantExtraCurrencyBg:ClearAllPoints();
     MerchantExtraCurrencyBg:SetPoint("TOPLEFT", MerchantExtraCurrencyInset, "TOPLEFT", 3, -2);
     MerchantExtraCurrencyBg:SetPoint("BOTTOMRIGHT", MerchantExtraCurrencyInset, "BOTTOMRIGHT", -3, 2); ]]
     -- add the search box

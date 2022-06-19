@@ -1,9 +1,9 @@
 EXTVENDOR_QUICKVENDOR_DEFAULT_BLACKLIST = {
 
    -- 19972,  -- Lucky Fishing Hat
-   -- 33820,  -- Weather-Beaten Fishing Hat
+   33820,  -- Weather-Beaten Fishing Hat
    -- 50741,  -- Vile Fumigator's Mask
-    --12185,  -- Bloodsail Admiral's Hat
+    12185,  -- Bloodsail Admiral's Hat
     33292,  -- Hallowed Helm
     38506,  -- Don Carlos' Famous Hat
    -- 38276,  -- Haliscan Brimmed Hat

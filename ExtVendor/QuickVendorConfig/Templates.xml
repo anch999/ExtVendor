@@ -57,9 +57,7 @@
 			</Anchors>
 		</HighlightTexture>
     </Button>
-
-
-    
+	!
     <Frame name="ExtVendor_ItemDropTemplate" virtual="true">
         <Size x="430" y="37"/>
         <Layers>

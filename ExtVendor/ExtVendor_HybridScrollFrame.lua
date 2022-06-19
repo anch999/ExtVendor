@@ -233,7 +233,6 @@ function ExtVendor_HybridScrollFrame_CreateButtons (self, buttonTemplate, initia
 	scrollChild:SetHeight(numButtons * buttonHeight);
 	self:SetVerticalScroll(0);
 	self:UpdateScrollChildRect();
-	print(numButtons)
 	self.buttons = buttons;
 	local scrollBar = self.scrollBar;	
 	scrollBar:SetMinMaxValues(0, numButtons * buttonHeight)
