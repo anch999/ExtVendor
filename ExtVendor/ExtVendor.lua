@@ -662,13 +662,18 @@ function ExtVendor_RebuildMerchantFrame()
     MerchantFrameBottomLeftBorder:SetTexture("Interface\\AddOns\\ExtVendor\\textures\\bottomborder");
     MerchantFrameBottomRightBorder:SetTexture("Interface\\AddOns\\ExtVendor\\textures\\bottomborder");
 
-    local topmiddleleft = MerchantFrame:CreateTexture(nil, "BACKGROUND");
-    topmiddleleft:SetPoint("TOP", MerchantFrame, "TOP", 0, 0);
-    topmiddleleft:SetTexture("Interface\\AddOns\\ExtVendor\\textures\\UI-Merchant-TopLeftwide");
+    local topmiddleleft = MerchantFrame:CreateTexture("ExtFrameTop", "BACKGROUND");
+    topmiddleleft:SetPoint("TOP", MerchantFrame,85, 0);
+    topmiddleleft:SetTexture("Interface\\AddOns\\ExtVendor\\textures\\UI-Merchant-TopRight","MIRROR","MIRROR");
+    topmiddleleft:SetHorizTile(true);
+    topmiddleleft:SetWidth(400);
+    --topmiddleleft:SetTexture("Interface\\AddOns\\ExtVendor\\textures\\UI-Merchant-TopLeftwide");
 
-    local botmiddleleft = MerchantFrame:CreateTexture(nil, "BACKGROUND");
-    botmiddleleft:SetPoint("BOTTOM", MerchantFrame, "BOTTOM", 0, 0);
-    botmiddleleft:SetTexture("Interface\\AddOns\\ExtVendor\\textures\\UI-AuctionFrame-Auction-Bottom");
+    local botmiddleleft = MerchantFrame:CreateTexture("ExtFrameBot", "BACKGROUND");
+    botmiddleleft:SetPoint("BOTTOM", MerchantFrame, 100, 0);
+    botmiddleleft:SetTexture("Interface\\AddOns\\ExtVendor\\textures\\UI-MERCHANT-BOTRIGHT","MIRROR","MIRROR");
+    botmiddleleft:SetHorizTile(true);
+    botmiddleleft:SetWidth(450);
 
     -- alter the position of the buyback item slot on the merchant tab
     MerchantBuyBackItem:ClearAllPoints();
@@ -1118,6 +1123,7 @@ end
 --========================================
 function ExtVendor_UpdateMouseScrolling(state)
     if (EXTVENDOR_DATA['config']['mousewheel_paging']) then
+        MerchantFrame:EnableMouseWheel();
         MerchantFrame:SetScript("OnMouseWheel", ExtVendor_OnMouseWheel);
     else
         MerchantFrame:SetScript("OnMouseWheel", nil);

@@ -142,6 +142,24 @@ function ExtVendor_QVConfig_OnLoad(self)
 end
 
 function ExtVendor_QVConfig_OnShow()
+
+    local function loadIDs(id,lastitem,idx,list)
+    local item = Item:CreateFromID(id);
+			item:ContinueOnLoad(function(itemId)
+				if item:GetInfo() then
+					if lastitem == idx then
+                        if list == "black" then
+                            ExtVendor_QVConfig_Blacklist_Update();
+                        elseif list == "Gwhite" then
+                            ExtVendor_QVConfig_GlobalWhitelist_Update();
+                        elseif list == "Pwhite" then
+                            ExtVendor_QVConfig_LocalWhitelist_Update();
+                        end
+                    end
+				end
+			end)
+    end
+
     ExtVendor_QVConfig_Blacklist_Update();
     ExtVendor_QVConfig_GlobalWhitelist_Update();
     ExtVendor_QVConfig_LocalWhitelist_Update();
@@ -149,14 +167,14 @@ function ExtVendor_QVConfig_OnShow()
         ONSHOW_TIMER = 0;
         ONSHOW_TIMER_ENABLED = true;
         FIRST_ONSHOW = false;
-        for idx, id in pairs(EXTVENDOR_DATA['quickvendor_blacklist']) do
-            GetItemInfo(id);
+        for idx, id in ipairs(EXTVENDOR_DATA['quickvendor_blacklist']) do
+            loadIDs(id,#EXTVENDOR_DATA['quickvendor_blacklist'],idx,"black");
         end
-        for idx, id in pairs(EXTVENDOR_DATA['quickvendor_whitelist']) do
-            GetItemInfo(id);
+        for idx, id in ipairs(EXTVENDOR_DATA['quickvendor_whitelist']) do
+            loadIDs(id,#EXTVENDOR_DATA['quickvendor_whitelist'],idx,"Gwhite");
         end
-        for idx, id in pairs(EXTVENDOR_DATA[EXTVENDOR_PROFILE]['quickvendor_whitelist']) do
-            GetItemInfo(id);
+        for idx, id in ipairs(EXTVENDOR_DATA[EXTVENDOR_PROFILE]['quickvendor_whitelist']) do
+            loadIDs(id,EXTVENDOR_DATA[EXTVENDOR_PROFILE]['quickvendor_whitelist'],idx,"Pwhite");
         end
     end
 end
@@ -165,7 +183,7 @@ function ExtVendor_QVConfig_OnUpdate(self, elapsed)
     -- half a second after the first time the quickvendor config is shown, refresh all lists
     if (ONSHOW_TIMER_ENABLED) then
         ONSHOW_TIMER = ONSHOW_TIMER + elapsed;
-        if (ONSHOW_TIMER >= 0.3) then
+        if (ONSHOW_TIMER >= 0.10) then
             ExtVendor_QVConfig_Blacklist_Update();
             ExtVendor_QVConfig_GlobalWhitelist_Update();
             ExtVendor_QVConfig_LocalWhitelist_Update();
@@ -305,7 +323,7 @@ end
 function ExtVendor_QVConfig_ShowBlacklistedItemTooltip(button)
     if (not button.itemID) then return; end
     GameTooltip:SetOwner(button, "ANCHOR_BOTTOMLEFT", 0, 20);
-   -- GameTooltip:SetItemByID(button.itemID);
+    GameTooltip:SetHyperlink(select(2,GetItemInfo(button.itemID)));
 end
 
 function ExtVendor_QVConfig_SelectItemListButton(self)
