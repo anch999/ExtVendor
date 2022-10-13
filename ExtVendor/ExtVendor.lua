@@ -667,7 +667,6 @@ function ExtVendor_RebuildMerchantFrame()
     topmiddleleft:SetTexture("Interface\\AddOns\\ExtVendor\\textures\\UI-Merchant-TopRight","MIRROR","MIRROR");
     topmiddleleft:SetHorizTile(true);
     topmiddleleft:SetWidth(400);
-    --topmiddleleft:SetTexture("Interface\\AddOns\\ExtVendor\\textures\\UI-Merchant-TopLeftwide");
 
     local botmiddleleft = MerchantFrame:CreateTexture("ExtFrameBot", "BACKGROUND");
     botmiddleleft:SetPoint("BOTTOM", MerchantFrame, 100, 0);
@@ -743,6 +742,37 @@ function ExtVendor_RebuildMerchantFrame()
     -- create a new tooltip object for handling item tooltips in the background
     evTooltip = CreateFrame("GameTooltip", "ExtVendorHiddenTooltip", UIParent, "GameTooltipTemplate");
 
+    function MerchantItemButton_OnModifiedClick(self, button)
+        if ( MerchantFrame.selectedTab == 1 ) then
+            -- Is merchant frame
+            if ( HandleModifiedItemClick(GetMerchantItemLink(self:GetID())) ) then
+                return;
+            end
+                if IsAltKeyDown() then
+                    local maxStack = GetMerchantItemMaxStack(self:GetID());
+                    print(maxStack)
+                    if ( self.extendedCost ) then
+                        MerchantFrame_ConfirmExtendedItemCost(self);
+                    elseif ( self.price and self.price >= MERCHANT_HIGH_PRICE_COST ) then
+                        MerchantFrame_ConfirmHighCostItem(self);
+                    else
+                        BuyMerchantItem(self:GetID(),maxStack);
+                    end
+                elseif ( IsModifiedClick("SPLITSTACK") ) then
+                    local maxStack = GetMerchantItemMaxStack(self:GetID());
+                    if ( self.price and (self.price > 0) ) then
+                        local canAfford = floor(GetMoney() / self.price);
+                        if ( canAfford < maxStack ) then
+                            maxStack = canAfford;
+                        end
+                    end
+                    OpenStackSplitFrame(1000, self, "BOTTOMLEFT", "TOPLEFT");
+                    return;
+            end
+        else
+            HandleModifiedItemClick(GetBuybackItemLink(self:GetID()));
+        end
+    end
 end
 
 --========================================
