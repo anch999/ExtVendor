@@ -1,0 +1,4 @@
+ExtVendorAscension-V1.2.0
+-Made it so you can buy up to 1000 items with shift click and this also works for none stackable items
+-Added If alt clicking an item it will buy the max stack size of that item
+https://github.com/anch999/ExtVendor/releases/download/1.2/ExtVendorAscension-V1.2.0.zip
