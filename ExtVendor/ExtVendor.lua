@@ -127,6 +127,7 @@ function ExtVendor_Setup()
     ExtVendor_CheckSetting("optimal_armor", false);
     ExtVendor_CheckSetting("show_suboptimal_armor", false);
     ExtVendor_CheckSetting("hide_known_recipes", false);
+    ExtVendor_CheckSetting("hide_known_ascension_collection_items", false);
     ExtVendor_CheckSetting("stockfilter_defall", false);
     ExtVendor_CheckSetting("show_load_message", false);
     ExtVendor_CheckSetting("mousewheel_paging", true);
@@ -254,6 +255,8 @@ function ExtVendor_UpdateMerchantInfo()
     local isFiltered = false;
     local isBoP = false;
     local isKnown = false;
+    local isCollectionItemKnow = false;
+
     local isDarkmoonReplica = false;
     local checkAlreadyKnown;
     local kc;
@@ -273,6 +276,7 @@ function ExtVendor_UpdateMerchantInfo()
                 quality = 1;
                 isKnown = false;
                 isBoP = false;
+                isCollectionItemKnow = false;
 
                 -- check if item is a darkmoon faire replica
                 if ((not isBoP) and (string.sub(name, 1, string.len(L["REPLICA"]) + 1) == (L["REPLICA"] .. " "))) then
@@ -282,10 +286,15 @@ function ExtVendor_UpdateMerchantInfo()
                 if (link) then
                     isBoP, isKnown = ExtVendor_GetExtendedItemInfo(link);
                     itemId = ExtVendor_GetItemID(link);
+                    isCollectionItemKnow = C_VanityCollection.IsCollectionItemOwned(itemId);
                     EXTVENDOR_DUMMY, EXTVENDOR_DUMMY, quality, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, EXTVENDOR_DUMMY, itemSellPrice = GetItemInfo(link);
                 end
                 -- filter known recipes
                 if (EXTVENDOR_DATA['config']['hide_known_recipes'] and isKnown) then
+                    isFiltered = true;
+                end
+                -- filter known skill cards
+                if (EXTVENDOR_DATA['config']['hide_known_ascension_collection_items'] and isCollectionItemKnow) then
                     isFiltered = true;
                 end
                 -- filter purchased recipes
@@ -411,11 +420,13 @@ function ExtVendor_UpdateMerchantInfo()
                 isBoP = false;
                 isKnown = false;
                 isFiltered = false;
+                isCollectionItemKnow = false;
 
                 quality = 1;
                 if (itemButton.link) then
                     isBoP, isKnown = ExtVendor_GetExtendedItemInfo(itemButton.link);
-                    itemId = ExtVendor_GetItemID(link);
+                    itemId = ExtVendor_GetItemID(itemButton.link);
+                    isCollectionItemKnow = C_VanityCollection.IsCollectionItemOwned(itemId);
                     EXTVENDOR_DUMMY, EXTVENDOR_DUMMY, quality, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, EXTVENDOR_DUMMY, itemSellPrice = GetItemInfo(itemButton.link);
                 end
 
@@ -448,6 +459,10 @@ function ExtVendor_UpdateMerchantInfo()
                     end
                     -- filter known recipes
                     if (EXTVENDOR_DATA['config']['hide_known_recipes'] and isKnown) then
+                        isFiltered = true;
+                    end
+                    -- filter known skill cards
+                    if (EXTVENDOR_DATA['config']['hide_known_ascension_collection_items'] and isCollectionItemKnow) then
                         isFiltered = true;
                     end
                     -- filter purchased recipes
@@ -933,6 +948,7 @@ function ExtVendor_DisplayFilterDropDown(self)
         { text = L["HIDE_UNUSABLE"], checked = EXTVENDOR_DATA['config']['usable_items'], func = function() ExtVendor_ToggleSetting("usable_items"); ExtVendor_UpdateDisplay(); end },
         { text = L["HIDE_FILTERED"], checked = EXTVENDOR_DATA['config']['hide_filtered'], func = function() ExtVendor_ToggleSetting("hide_filtered"); ExtVendor_UpdateDisplay(); end },
         { text = L["HIDE_KNOWN_RECIPES"], checked = EXTVENDOR_DATA['config']['hide_known_recipes'], func = function() ExtVendor_ToggleSetting("hide_known_recipes"); ExtVendor_UpdateDisplay(); end },
+        { text = L["HIDE_KNOWN_ASCENSION_COLLECTION_ITEMS"], checked = EXTVENDOR_DATA['config']['hide_known_ascension_collection_items'], func = function() ExtVendor_ToggleSetting("hide_known_ascension_collection_items"); ExtVendor_UpdateDisplay(); end },
         { text = L["FILTER_SUBOPTIMAL"], checked = EXTVENDOR_DATA['config']['optimal_armor'], func = function() ExtVendor_ToggleSetting("optimal_armor"); ExtVendor_UpdateDisplay(); end },
         { text = L["FILTER_RECIPES"], hasArrow = true, notCheckable = true,
             menuList = {

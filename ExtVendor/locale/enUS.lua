@@ -18,6 +18,7 @@ L["JUNK_MONEY_EARNED"] = "Money earned from junk items: %s";
 L["HIDE_UNUSABLE"] = "Usable Items";
 L["HIDE_FILTERED"] = "Hide Filtered";
 L["HIDE_KNOWN_RECIPES"] = "Unlearned Recipes Only";
+L["HIDE_KNOWN_ASCENSION_COLLECTION_ITEMS"] = "Filter Known Skill Cards/Vanity Items";
 L["FILTER_SUBOPTIMAL"] = "Filter Suboptimal Armor";
 L["FILTER_RECIPES"] = "Recipe Filtering";
 L["FILTER_ALREADY_KNOWN"] = "Hide Already Known";
@@ -158,6 +159,6 @@ L["LABEL_AUTHOR"] = "Author";
 L["LABEL_EMAIL"] = "Email";
 L["LABEL_HOSTS"] = "Download Site(s)";
 
-L["COPYRIGHT"] = "©2012, All rights reserved.";
+L["COPYRIGHT"] = "ï¿½2012, All rights reserved.";
 
 end
