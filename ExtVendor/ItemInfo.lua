@@ -68,7 +68,7 @@ function ExtVendor_GetExtendedItemInfo(link)
                 end
 
                 -- check for "Already Known"
-                if (checkLine == ITEM_SPELL_KNOWN) or (itemID and C_VanityCollection.IsCollectionItemOwned(itemID)) then
+                if (checkLine == ITEM_SPELL_KNOWN) then
                     isKnown = true;
                 end
 
