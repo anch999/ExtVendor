@@ -173,7 +173,7 @@ function ExtVendor_ConfirmQuickVendor()
                             else
                                 quantity = "";
                             end
-                            itemsSold = itemsSold .. "|c" .. color .. "[" .. name .. "]|r" .. quantity;
+                            itemsSold = itemsSold .. color .. "[" .. name .. "]|r" .. quantity;
                             itemsOnLine = itemsOnLine + 1;
                             if (itemsOnLine == 12) then
                                 DEFAULT_CHAT_FRAME:AddMessage(soldPref .. " " .. itemsSold, ChatTypeInfo["SYSTEM"].r, ChatTypeInfo["SYSTEM"].g, ChatTypeInfo["SYSTEM"].b, GetChatTypeIndex("SYSTEM"));

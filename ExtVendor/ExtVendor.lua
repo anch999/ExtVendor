@@ -101,7 +101,11 @@ function ExtVendor_OnLoad(self)
     SlashCmdList["EXTVENDOR"] = ExtVendor_CommandHandler;
 
 end
-
+local function ExtVendor_AutoSell_Junk()
+    if EXTVENDOR_DATA.config.enable_quickvendor_auto then
+        ExtVendor_ConfirmQuickVendor()
+    end
+end
 --========================================
 -- Hooked merchant frame OnShow
 --========================================
@@ -112,6 +116,7 @@ function ExtVendor_OnShow(self)
     end ]]
     ExtVendor_SetMinimumQuality(0);
     ExtVendor_SetSlotFilter(0);
+    ExtVendor_AutoSell_Junk();
 end
 
 --========================================
@@ -158,6 +163,7 @@ function ExtVendor_Setup()
     ExtVendor_CheckSetting("show_load_message", false);
     ExtVendor_CheckSetting("mousewheel_paging", true);
     ExtVendor_CheckSetting("enable_quickvendor", true);
+    ExtVendor_CheckSetting("enable_quickvendor_auto", true);
     ExtVendor_CheckSetting("scale", 1);
     ExtVendor_CheckSetting("filter_purchased_recipes", true);
 
@@ -789,10 +795,10 @@ function ExtVendor_RebuildMerchantFrame()
     junkBtn:SetScript("OnLeave", ExtVendor_HideButtonTooltip);
     junkBtn:SetPushedTexture("Interface\\AddOns\\ExtVendor\\InterfaceElements\\UI-Quickslot-Depress");
     junkBtn:SetHighlightTexture("Interface\\AddOns\\ExtVendor\\InterfaceElements\\ButtonHilight-Square", "ADD");
-    junkBtnIcon = junkBtn:CreateTexture("MerchantFrameSellJunkButtonIcon", "BORDER");
-    junkBtnIcon:SetTexture("Interface\\AddOns\\ExtVendor\\InterfaceElements\\Inv_Misc_Bag_10");
-    junkBtnIcon:SetPoint("TOPLEFT", junkBtn, "TOPLEFT", 0, 0);
-    junkBtnIcon:SetPoint("BOTTOMRIGHT", junkBtn, "BOTTOMRIGHT", 0, 0);
+    junkBtn.junkBtnIcon = junkBtn:CreateTexture("MerchantFrameSellJunkButtonIcon", "BORDER");
+    junkBtn.junkBtnIcon:SetTexture("Interface\\AddOns\\ExtVendor\\InterfaceElements\\Inv_Misc_Bag_10");
+    junkBtn.junkBtnIcon:SetPoint("TOPLEFT", junkBtn, "TOPLEFT", 0, 0);
+    junkBtn.junkBtnIcon:SetPoint("BOTTOMRIGHT", junkBtn, "BOTTOMRIGHT", 0, 0);
 
     -- filter button
    local filterBtn = CreateFrame("Button", "MerchantFrameFilterButton", MerchantFrame, "ExtVendor_UIButtonStretchTemplate");
@@ -971,7 +977,7 @@ function ExtVendor_InitQualityFilter()
                 info.text = ALL;
             else
                 EXTVENDOR_DUMMY, EXTVENDOR_DUMMY, EXTVENDOR_DUMMY, color = GetItemQualityColor(i);
-                info.text = "|c" .. color .. _G["ITEM_QUALITY" .. i .. "_DESC"];
+                info.text = color .. _G["ITEM_QUALITY" .. i .. "_DESC"];
             end
             info.value = i;
             info.checked = nil;

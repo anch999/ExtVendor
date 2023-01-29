@@ -242,7 +242,7 @@
                                             </Anchor>
                                         </Anchors>
                                     </CheckButton>
-                                    <CheckButton id="21" name="$parent_SuboptimalArmor" inherits="ExtVendor_CheckBoxTemplate">
+                                    <CheckButton id="21" name="$parent_AutoQuickVendor" inherits="ExtVendor_CheckBoxTemplate">
                                         <Anchors>
                                             <Anchor point="TOPLEFT">
                                                 <Offset>
@@ -251,7 +251,7 @@
                                             </Anchor>
                                         </Anchors>
                                     </CheckButton>
-                                    <CheckButton id="22" name="$parent_AlreadyKnown" inherits="ExtVendor_CheckBoxTemplate">
+                                    <CheckButton id="21" name="$parent_SuboptimalArmor" inherits="ExtVendor_CheckBoxTemplate">
                                         <Anchors>
                                             <Anchor point="TOPLEFT">
                                                 <Offset>
@@ -260,7 +260,7 @@
                                             </Anchor>
                                         </Anchors>
                                     </CheckButton>
-                                    <CheckButton id="23" name="$parent_UnusableEquip" inherits="ExtVendor_CheckBoxTemplate">
+                                    <CheckButton id="22" name="$parent_AlreadyKnown" inherits="ExtVendor_CheckBoxTemplate">
                                         <Anchors>
                                             <Anchor point="TOPLEFT">
                                                 <Offset>
@@ -269,7 +269,7 @@
                                             </Anchor>
                                         </Anchors>
                                     </CheckButton>
-                                    <CheckButton id="24" name="$parent_WhiteGear" inherits="ExtVendor_CheckBoxTemplate">
+                                    <CheckButton id="23" name="$parent_WhiteGear" inherits="ExtVendor_CheckBoxTemplate">
                                         <Anchors>
                                             <Anchor point="TOPLEFT">
                                                 <Offset>

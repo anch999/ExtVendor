@@ -146,6 +146,20 @@
                     </OnClick>
                 </Scripts>
             </Button>
+            <Button name="$parent_ShiftADDGlobalWhitelistButton" inherits="UIPanelButtonTemplate">
+                <Size x="130" y="25"/>
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="$parent_ClearGlobalWhitelistButton" relativePoint="RIGHT" x="0" y="0"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ExtVendor_QvConfig_ShiftADD("Global");
+                    </OnClick>
+                    <OnShow>
+                        ExtVendor_QvConfig_ShiftADDOnShow("Global")
+                    </OnShow>
+                </Scripts>
+            </Button>
 
             <Frame name="$parent_ItemDropLocalWhitelist" inherits="ExtVendor_ItemDropTemplate">
                 <Anchors>
@@ -169,7 +183,7 @@
                 </Scripts>
             </Button>
             <Button name="$parent_ClearLocalWhitelistButton" inherits="UIPanelButtonTemplate">
-                <Size x="150" y="25"/>
+                <Size x="130" y="25"/>
                 <Anchors>
                     <Anchor point="LEFT" relativeTo="$parent_RemoveFromLocalWhitelistButton" relativePoint="RIGHT" x="0" y="0"/>
                 </Anchors>
@@ -177,6 +191,20 @@
                     <OnClick>
                         StaticPopup_Show("EXTVENDOR_CONFIRM_CLEAR_LOCAL_WHITELIST");
                     </OnClick>
+                </Scripts>
+            </Button>
+            <Button name="$parent_ShiftADDLocalWhitelistButton" inherits="UIPanelButtonTemplate">
+                <Size x="150" y="25"/>
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="$parent_ClearLocalWhitelistButton" relativePoint="RIGHT" x="0" y="0"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ExtVendor_QvConfig_ShiftADD("Local");
+                    </OnClick>
+                    <OnShow>
+                        ExtVendor_QvConfig_ShiftADDOnShow("Local")
+                    </OnShow>
                 </Scripts>
             </Button>
         </Frames>

@@ -142,12 +142,13 @@ function ExtVendor_QVConfig_OnLoad(self)
 end
 
 function ExtVendor_QVConfig_OnShow()
-
-    local function loadIDs(id,lastitem,idx,list)
-    local item = Item:CreateFromID(id);
+    local count = { 0, 0, 0 }
+    local function loadIDs(id, cNum, list)
+        if GetItemInfo(id) then count[cNum] = count[cNum] - 1 return end
+        local item = Item:CreateFromID(id);
 			item:ContinueOnLoad(function(itemId)
 				if item:GetInfo() then
-					if lastitem == idx then
+					if count[cNum] == 1 then
                         if list == "black" then
                             ExtVendor_QVConfig_Blacklist_Update();
                         elseif list == "Gwhite" then
@@ -157,6 +158,7 @@ function ExtVendor_QVConfig_OnShow()
                         end
                     end
 				end
+                count[cNum] = count[cNum] - 1
 			end)
     end
 
@@ -167,14 +169,57 @@ function ExtVendor_QVConfig_OnShow()
         ONSHOW_TIMER = 0;
         ONSHOW_TIMER_ENABLED = true;
         FIRST_ONSHOW = false;
-        for idx, id in ipairs(EXTVENDOR_DATA['quickvendor_blacklist']) do
-            loadIDs(id,#EXTVENDOR_DATA['quickvendor_blacklist'],idx,"black");
+        count[1] = #EXTVENDOR_DATA['quickvendor_blacklist']
+        for _, id in ipairs(EXTVENDOR_DATA['quickvendor_blacklist']) do
+            loadIDs(id, 1,"black");
         end
-        for idx, id in ipairs(EXTVENDOR_DATA['quickvendor_whitelist']) do
-            loadIDs(id,#EXTVENDOR_DATA['quickvendor_whitelist'],idx,"Gwhite");
+        count[2] = #EXTVENDOR_DATA['quickvendor_whitelist']
+        for _, id in ipairs(EXTVENDOR_DATA['quickvendor_whitelist']) do
+            loadIDs(id, 2,"Gwhite");
         end
-        for idx, id in ipairs(EXTVENDOR_DATA[EXTVENDOR_PROFILE]['quickvendor_whitelist']) do
-            loadIDs(id,EXTVENDOR_DATA[EXTVENDOR_PROFILE]['quickvendor_whitelist'],idx,"Pwhite");
+        count[3] = #EXTVENDOR_DATA[EXTVENDOR_PROFILE]['quickvendor_whitelist']
+        for _, id in ipairs(EXTVENDOR_DATA[EXTVENDOR_PROFILE]['quickvendor_whitelist']) do
+            loadIDs(id, 3,"Pwhite");
+        end
+    end
+end
+
+function ExtVendor_QvConfig_ShiftADDOnShow(type)
+    if type == "Global" then
+        if EXTVENDOR_DATA['config']['shift_add_global'] then
+            ExtVendor_QVConfigFrame_ShiftADDGlobalWhitelistButton:SetText("Alt Click Add On")
+        else
+            ExtVendor_QVConfigFrame_ShiftADDGlobalWhitelistButton:SetText("Alt Click Add Off")
+        end
+    else
+        if EXTVENDOR_DATA['config']['shift_add_local'] then
+            ExtVendor_QVConfigFrame_ShiftADDLocalWhitelistButton:SetText("Alt Click Add On")
+        else
+            ExtVendor_QVConfigFrame_ShiftADDLocalWhitelistButton:SetText("Alt Click Add Off")
+        end
+    end
+end
+
+function ExtVendor_QvConfig_ShiftADD(type)
+    if type == "Global" then
+        if EXTVENDOR_DATA['config']['shift_add_global'] then
+            EXTVENDOR_DATA['config']['shift_add_global'] = false
+            ExtVendor_QVConfigFrame_ShiftADDGlobalWhitelistButton:SetText("Alt Click Add Off")
+        else
+            EXTVENDOR_DATA['config']['shift_add_global'] = true
+            EXTVENDOR_DATA['config']['shift_add_local'] = false
+            ExtVendor_QVConfigFrame_ShiftADDLocalWhitelistButton:SetText("Alt Click Add Off")
+            ExtVendor_QVConfigFrame_ShiftADDGlobalWhitelistButton:SetText("Alt Click Add On")
+        end
+    else
+        if EXTVENDOR_DATA['config']['shift_add_local'] then
+            EXTVENDOR_DATA['config']['shift_add_local'] = false
+            ExtVendor_QVConfigFrame_ShiftADDLocalWhitelistButton:SetText("Alt Click Add Off")
+        else
+            EXTVENDOR_DATA['config']['shift_add_local'] = true
+            EXTVENDOR_DATA['config']['shift_add_global'] = false
+            ExtVendor_QVConfigFrame_ShiftADDLocalWhitelistButton:SetText("Alt Click Add On")
+            ExtVendor_QVConfigFrame_ShiftADDGlobalWhitelistButton:SetText("Alt Click Add Off")
         end
     end
 end
@@ -343,9 +388,32 @@ local function errorMessage(message, itemLink, reason)
     return r;
 end
 
-function ExtVendor_QVConfig_OnItemDrop(button)
+hooksecurefunc("ContainerFrameItemButton_OnModifiedClick", function(self, button)
+    if IsAltKeyDown() then
+        if ExtVendor_QVConfigFrame:IsVisible() and  EXTVENDOR_DATA['config']['shift_add_global'] then
+            local link = select(7,GetContainerItemInfo(self:GetParent():GetID(), self:GetID()))
+            local type = {}
+            type.isWhitelist = true
+            type.isLocal = false
+            ExtVendor_QVConfig_OnItemDrop(type, link)
+        elseif ExtVendor_QVConfigFrame:IsVisible() and EXTVENDOR_DATA['config']['shift_add_local'] then
+            local link = select(7,GetContainerItemInfo(self:GetParent():GetID(), self:GetID()))
+            local type = {}
+            type.isWhitelist = true
+            type.isLocal = true
+            ExtVendor_QVConfig_OnItemDrop(type, link)
+        end
+    end
+end)
 
-    local infoType, itemID, itemLink = GetCursorInfo();
+function ExtVendor_QVConfig_OnItemDrop(button, link)
+    local infoType, itemID
+    if link then
+        itemID = tonumber(link:match("item:(%d+)"))
+        if link:match("item:") then infoType = "item" end
+    else
+        infoType, itemID = GetCursorInfo();
+    end
     if (infoType ~= "item") then return; end
     local itemName, retLink, itemRarity, _X, _X, _X, _X, _X, _X, _X, itemSellPrice = GetItemInfo(itemID);
     ClearCursor();

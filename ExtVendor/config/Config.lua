@@ -5,9 +5,9 @@ local OLD_LOADMESSAGE = false;
 local OLD_SUBARMOR_SHOW = false;
 local OLD_STOCK_DEFALL = false;
 local OLD_QUICKVENDOR_ENABLEBUTTON = false;
+local OLD_AUTOQUICKVENDOR = false;
 local OLD_QUICKVENDOR_SUBOPTIMAL = false;
 local OLD_QUICKVENDOR_ALREADYKNOWN = false;
-local OLD_QUICKVENDOR_UNUSABLEEQUIP = false;
 local OLD_QUICKVENDOR_WHITEGEAR = false;
 local OLD_MOUSEWHEEL_PAGING = false;
 local OLD_SCALE = 1;
@@ -57,14 +57,14 @@ function ExtVendorConfig_OnLoad(self)
 	ExtVendorConfig_QuickVendorContainer_EnableButtonText:SetText(L["OPTION_QUICKVENDOR_ENABLEBUTTON"]);
 	ExtVendorConfig_QuickVendorContainer_EnableButton.tooltip = L["OPTION_QUICKVENDOR_ENABLEBUTTON_TOOLTIP"];
 
+    ExtVendorConfig_QuickVendorContainer_AutoQuickVendorText:SetText(L["OPTION_enable_quickvendor_autoVENDORBUTTON"]);
+	ExtVendorConfig_QuickVendorContainer_AutoQuickVendor.tooltip = L["OPTION_enable_quickvendor_autoVENDORBUTTON_TOOLTIP"];
+    
 	ExtVendorConfig_QuickVendorContainer_SuboptimalArmorText:SetText(L["OPTION_QUICKVENDOR_SUBARMOR"]);
 	ExtVendorConfig_QuickVendorContainer_SuboptimalArmor.tooltip = L["OPTION_QUICKVENDOR_SUBARMOR_TOOLTIP"] .. "\n\n|cff00ff00" .. L["QUICKVENDOR_SOULBOUND"];
 
 	ExtVendorConfig_QuickVendorContainer_AlreadyKnownText:SetText(L["OPTION_QUICKVENDOR_ALREADYKNOWN"]);
 	ExtVendorConfig_QuickVendorContainer_AlreadyKnown.tooltip = L["OPTION_QUICKVENDOR_ALREADYKNOWN_TOOLTIP"] .. "\n\n|cff00ff00" .. L["QUICKVENDOR_SOULBOUND"];
-
-	ExtVendorConfig_QuickVendorContainer_UnusableEquipText:SetText(L["OPTION_QUICKVENDOR_UNUSABLE"]);
-	ExtVendorConfig_QuickVendorContainer_UnusableEquip.tooltip = L["OPTION_QUICKVENDOR_UNUSABLE_TOOLTIP"] .. "\n\n|cff00ff00" .. L["QUICKVENDOR_SOULBOUND"];
 
 	ExtVendorConfig_QuickVendorContainer_WhiteGearText:SetText(L["OPTION_QUICKVENDOR_WHITEGEAR"]);
 	ExtVendorConfig_QuickVendorContainer_WhiteGear.tooltip = L["OPTION_QUICKVENDOR_WHITEGEAR_TOOLTIP"];
@@ -94,9 +94,9 @@ function ExtVendorConfig_Refresh()
 	ExtVendorConfig_FilterContainer_StockDefaultAll:SetChecked(EXTVENDOR_DATA['config']['stockfilter_defall']);
 
     ExtVendorConfig_QuickVendorContainer_EnableButton:SetChecked(EXTVENDOR_DATA['config']['enable_quickvendor']);
+    ExtVendorConfig_QuickVendorContainer_AutoQuickVendor:SetChecked(EXTVENDOR_DATA['config']['enable_quickvendor_auto']);
     ExtVendorConfig_QuickVendorContainer_SuboptimalArmor:SetChecked(EXTVENDOR_DATA['config']['quickvendor_suboptimal']);
     ExtVendorConfig_QuickVendorContainer_AlreadyKnown:SetChecked(EXTVENDOR_DATA['config']['quickvendor_alreadyknown']);
-    ExtVendorConfig_QuickVendorContainer_UnusableEquip:SetChecked(EXTVENDOR_DATA['config']['quickvendor_unusable']);
     ExtVendorConfig_QuickVendorContainer_WhiteGear:SetChecked(EXTVENDOR_DATA['config']['quickvendor_whitegear']);
 end
 
@@ -111,9 +111,9 @@ function ExtVendorConfig_StoreCurrentSettings()
     OLD_SUBARMOR_SHOW = EXTVENDOR_DATA['config']['show_suboptimal_armor'];
     OLD_STOCK_DEFALL = EXTVENDOR_DATA['config']['stockfilter_defall'];
     OLD_QUICKVENDOR_ENABLEBUTTON = EXTVENDOR_DATA['config']['enable_quickvendor'];
+    OLD_AUTOQUICKVENDOR = EXTVENDOR_DATA['config']['enable_quickvendor_auto'];
     OLD_QUICKVENDOR_SUBOPTIMAL = EXTVENDOR_DATA['config']['quickvendor_suboptimal'];
     OLD_QUICKVENDOR_ALREADYKNOWN = EXTVENDOR_DATA['config']['quickvendor_alreadyknown'];
-    OLD_QUICKVENDOR_UNUSABLEEQUIP = EXTVENDOR_DATA['config']['quickvendor_unusable'];
     OLD_QUICKVENDOR_WHITEGEAR = EXTVENDOR_DATA['config']['quickvendor_whitegear'];
 end
 
@@ -133,10 +133,10 @@ function ExtVendorConfig_Cancel()
     EXTVENDOR_DATA['config']['scale'] = OLD_SCALE;
     EXTVENDOR_DATA['config']['show_suboptimal_armor'] = OLD_SUBARMOR_SHOW;
     EXTVENDOR_DATA['config']['stockfilter_defall'] = OLD_STOCK_DEFALL;
+    EXTVENDOR_DATA['config']['enable_quickvendor_auto'] = OLD_AUTOQUICKVENDOR;
     EXTVENDOR_DATA['config']['enable_quickvendor'] = OLD_QUICKVENDOR_ENABLEBUTTON;
     EXTVENDOR_DATA['config']['quickvendor_suboptimal'] = OLD_QUICKVENDOR_SUBOPTIMAL;
     EXTVENDOR_DATA['config']['quickvendor_alreadyknown'] = OLD_QUICKVENDOR_ALREADYKNOWN;
-    EXTVENDOR_DATA['config']['quickvendor_unusable'] = OLD_QUICKVENDOR_UNUSABLEEQUIP;
     EXTVENDOR_DATA['config']['quickvendor_whitegear'] = OLD_QUICKVENDOR_WHITEGEAR;
     EXTVENDOR_DATA['config']['mousewheel_paging'] = OLD_MOUSEWHEEL_PAGING;
     ExtVendor_UpdateMouseScrolling();
@@ -187,6 +187,11 @@ function ExtVendorConfig_CheckBox_OnClick(self, id)
             EXTVENDOR_DATA['config']['enable_quickvendor'] = true;
         else
             EXTVENDOR_DATA['config']['enable_quickvendor'] = false;
+        end
+        if (self:GetChecked()) then
+            EXTVENDOR_DATA['config']['enable_quickvendor_auto'] = true;
+        else
+            EXTVENDOR_DATA['config']['enable_quickvendor_auto'] = false;
         end
         ExtVendor_UpdateQuickVendorButtonVisibility();
     elseif (id == 21) then
