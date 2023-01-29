@@ -24,6 +24,7 @@ L["FILTER_RECIPES"] = "Recipe Filtering";
 L["FILTER_ALREADY_KNOWN"] = "Hide Already Known";
 L["FILTER_PURCHASED"] = "Hide Already Purchased";
 L["FILTER_SLOT"] = "Slot";
+L["FILTER_STAT"] = "Stats";
 L["QUALITY_FILTER_MINIMUM"] = "Quality (Minimum)";
 L["QUALITY_FILTER_SPECIFIC"] = "Quality (Specific)";
 L["STOCK_FILTER"] = "Stock Filter";
@@ -60,6 +61,31 @@ L["SLOT_RANGED"] = "Ranged";
 L["SLOT_CAT_OFFHAND"] = "Off Hand";
 L["SLOT_OFFHAND"] = "Held in Off-hand";
 L["SLOT_SHIELD"] = "Shields";
+
+L["STAT_PRIMARY"] = "Primary Stats";
+L["STAT_SECONDARY"] = "Secondary Stats";
+L["STAT_DEFENSIVE"] = "Defensive Stats";
+
+L["STAT_STRENGTH"] = "Strength";
+L["STAT_AGILITY"] = "Agility";
+L["STAT_INTELLECT"] = "Intellect";
+L["STAT_SPIRIT"] = "Spirit";
+
+L["STAT_ATTACT_POWER"] = "Attack Power";
+L["STAT_SPELL_POWER"] = "Spell Power";
+L["STAT_CRIT"] = "Crit";
+L["STAT_HIT"] = "Hit";
+L["STAT_HASTE"] = "Haste";
+L["STAT_EXPERTISE"] = "Expertise";
+L["STAT_ARMOR_PEN"] = "Armor Penetration";
+L["STAT_SPELL_PEN"] = "Spell Penetration";
+
+L["DEFENSE"] = "Defense";
+L["DODGE"] = "Dodge";
+L["PARRY"] = "Parry";
+L["BLOCK"] = "Block";
+L["BLOCK_VALUE"] = "Block Value";
+L["RESILIENCE"] = "Resilience";
 
 -- The following strings are used to match against text found on item tooltips or itemType/itemSubType returns of GetItemInfo(); if they don't match, things will break.
 L["ARMOR"] = "Armor";

@@ -14,6 +14,7 @@ local L = LibStub("AceLocale-3.0"):GetLocale("ExtVendor", true);
 local EXTVENDOR_DUMMY;
 local EXTVENDOR_NUM_PAGES = 1;
 local SLOT_FILTER_INDEX = 0;
+local STAT_FILTER_INDEX = 0;
 
 EXTVENDOR_ARMOR_RANKS = {
     [L["ARMOR_CLOTH"]] = 1,
@@ -52,6 +53,31 @@ local SLOT_FILTERS = {
     [42] = {"INVTYPE_SHIELD"},
 };
 
+local STAT_FILTERS = {
+    [1] = {"ITEM_MOD_STRENGTH_SHORT", "ITEM_MOD_STRENGTH_SHORT", "ITEM_MOD_AGILITY_SHORT", "ITEM_MOD_INTELLECT_SHORT", "ITEM_MOD_SPIRIT_SHORT"},
+    [2] = {"ITEM_MOD_STRENGTH_SHORT"},
+    [3] = {"ITEM_MOD_AGILITY_SHORT"},
+    [4] = {"ITEM_MOD_INTELLECT_SHORT"},
+    [5] = {"ITEM_MOD_SPIRIT_SHORT"},
+
+    [6] = {"ITEM_MOD_ATTACK_POWER_SHORT", "ITEM_MOD_SPELL_POWER_SHORT", "ITEM_MOD_CRIT_RATING_SHORT", "ITEM_MOD_HIT_RATING_SHORT", "ITEM_MOD_HASTE_RATING_SHORT", "ITEM_MOD_EXPERTISE_RATING_SHORT", "ITEM_MOD_ARMOR_PENETRATION_RATING_SHORT", "ITEM_MOD_SPELL_PENETRATION_SHORT"},
+    [7] = {"ITEM_MOD_ATTACK_POWER_SHORT"},
+    [8] = {"ITEM_MOD_SPELL_POWER_SHORT"},
+    [9] = {"ITEM_MOD_CRIT_RATING_SHORT"},
+    [10] = {"ITEM_MOD_HIT_RATING_SHORT"},
+    [11] = {"ITEM_MOD_HASTE_RATING_SHORT"},
+    [12] = {"ITEM_MOD_EXPERTISE_RATING_SHORT"},
+    [13] = {"ITEM_MOD_ARMOR_PENETRATION_RATING_SHORT"},
+    [14] = {"ITEM_MOD_SPELL_PENETRATION_SHORT"},
+
+    [15] = {"ITEM_MOD_DEFENSE_SKILL_RATING_SHORT", "ITEM_MOD_DODGE_RATING_SHORT", "ITEM_MOD_PARRY_RATING_SHORT", "ITEM_MOD_BLOCK_RATING_SHORT", "ITEM_MOD_BLOCK_VALUE_SHORT", "ITEM_MOD_RESILIENCE_RATING"},
+    [16] = {"ITEM_MOD_DEFENSE_SKILL_RATING_SHORT"},
+    [17] = {"ITEM_MOD_DODGE_RATING_SHORT"},
+    [18] = {"ITEM_MOD_PARRY_RATING_SHORT"},
+    [19] = {"ITEM_MOD_BLOCK_RATING_SHORT"},
+    [20] = {"ITEM_MOD_BLOCK_VALUE_SHORT"},
+    [21] = {"ITEM_MOD_RESILIENCE_RATING"}
+}
 --========================================
 -- Initial load routine
 --========================================
@@ -333,7 +359,7 @@ function ExtVendor_UpdateMerchantInfo()
                 if (SLOT_FILTER_INDEX > 0) then
                     if (SLOT_FILTERS[SLOT_FILTER_INDEX]) then
                         local validSlot = false;
-                        for j, slot in pairs(SLOT_FILTERS[SLOT_FILTER_INDEX]) do
+                        for _, slot in pairs(SLOT_FILTERS[SLOT_FILTER_INDEX]) do
                             if (slot == itemEquipLoc) then
                                 validSlot = true;
                             end
@@ -343,6 +369,24 @@ function ExtVendor_UpdateMerchantInfo()
                         end
                     end
                 end
+                
+                -- check stat filter
+                if (STAT_FILTER_INDEX > 0) then
+                    if (STAT_FILTERS[STAT_FILTER_INDEX]) and link then
+                        local ItemStats = {};
+                        GetItemStats(link, ItemStats);
+                        local validSlot = false;
+                        for _, slot in pairs(STAT_FILTERS[STAT_FILTER_INDEX]) do
+                            if (ItemStats[slot]) then
+                                validSlot = true;
+                            end
+                        end
+                        if (not validSlot) then
+                            isFiltered = true;
+                        end
+                    end
+                end
+
                 -- ***** add item to list if not filtered *****
                 if (not isFiltered) then
                     table.insert(indexes, i);
@@ -477,8 +521,25 @@ function ExtVendor_UpdateMerchantInfo()
                     if (SLOT_FILTER_INDEX > 0) then
                         if (SLOT_FILTERS[SLOT_FILTER_INDEX]) then
                             local validSlot = false;
-                            for j, slot in pairs(SLOT_FILTERS[SLOT_FILTER_INDEX]) do
+                            for _, slot in pairs(SLOT_FILTERS[SLOT_FILTER_INDEX]) do
                                 if (slot == itemEquipLoc) then
+                                    validSlot = true;
+                                end
+                            end
+                            if (not validSlot) then
+                                isFiltered = true;
+                            end
+                        end
+                    end
+
+                    -- check stat filter
+                    if (STAT_FILTER_INDEX > 0) then
+                        if (STAT_FILTERS[STAT_FILTER_INDEX]) and itemButton.link then
+                            local ItemStats = {};
+                            GetItemStats(itemButton.link, ItemStats);
+                            local validSlot = false;
+                            for _, slot in pairs(STAT_FILTERS[STAT_FILTER_INDEX]) do
+                                if (ItemStats[slot]) then
                                     validSlot = true;
                                 end
                             end
@@ -956,6 +1017,44 @@ function ExtVendor_DisplayFilterDropDown(self)
                 { text = L["FILTER_PURCHASED"], checked = EXTVENDOR_DATA['config']['filter_purchased_recipes'], func = function() ExtVendor_ToggleSetting("filter_purchased_recipes"); ExtVendor_UpdateDisplay(); end },
             },
         },
+        { text = L["FILTER_STAT"], hasArrow = true, notCheckable = true,
+            menuList = {
+                { text = ALL,                   checked = (STAT_FILTER_INDEX == 0),  func = function() ExtVendor_SetSlotFilter(0, true); end },
+                { text = L["STAT_PRIMARY"], hasArrow = true, notCheckable = true,
+                    menuList = {
+                        { text = ALL,                   checked = (STAT_FILTER_INDEX == 1),  func = function() ExtVendor_SetSlotFilter(1, true); end },
+                        { text = L["STAT_STRENGTH"],        checked = (STAT_FILTER_INDEX == 2), func = function() ExtVendor_SetSlotFilter(2, true); end },
+                        { text = L["STAT_AGILITY"],       checked = (STAT_FILTER_INDEX == 3), func = function() ExtVendor_SetSlotFilter(3, true); end },
+                        { text = L["STAT_INTELLECT"],      checked = (STAT_FILTER_INDEX == 4), func = function() ExtVendor_SetSlotFilter(4, true); end },
+                        { text = L["STAT_SPIRIT"],      checked = (STAT_FILTER_INDEX == 5), func = function() ExtVendor_SetSlotFilter(5, true); end },
+                    },
+                },
+                { text = L["STAT_SECONDARY"], hasArrow = true, notCheckable = true,
+                    menuList = {
+                        { text = ALL,                   checked = (STAT_FILTER_INDEX == 6), func = function() ExtVendor_SetSlotFilter(6, true); end },
+                        { text = L["STAT_ATTACT_POWER"],        checked = (STAT_FILTER_INDEX == 7), func = function() ExtVendor_SetSlotFilter(7, true); end },
+                        { text = L["STAT_SPELL_POWER"],       checked = (STAT_FILTER_INDEX == 8), func = function() ExtVendor_SetSlotFilter(8, true); end },
+                        { text = L["STAT_CRIT"],      checked = (STAT_FILTER_INDEX == 9), func = function() ExtVendor_SetSlotFilter(9, true); end },
+                        { text = L["STAT_HIT"],      checked = (STAT_FILTER_INDEX == 10), func = function() ExtVendor_SetSlotFilter(10, true); end },
+                        { text = L["STAT_HASTE"],      checked = (STAT_FILTER_INDEX == 11), func = function() ExtVendor_SetSlotFilter(11, true); end },
+                        { text = L["STAT_EXPERTISE"],      checked = (STAT_FILTER_INDEX == 12), func = function() ExtVendor_SetSlotFilter(12, true); end },
+                        { text = L["STAT_ARMOR_PEN"],      checked = (STAT_FILTER_INDEX == 13), func = function() ExtVendor_SetSlotFilter(13, true); end },
+                        { text = L["STAT_SPELL_PEN"],      checked = (STAT_FILTER_INDEX == 14), func = function() ExtVendor_SetSlotFilter(14, true); end },
+                    },
+                },
+                { text = L["STAT_DEFENSIVE"], hasArrow = true, notCheckable = true,
+                    menuList = {
+                        { text = ALL,                   checked = (STAT_FILTER_INDEX == 15), func = function() ExtVendor_SetSlotFilter(15, true); end },
+                        { text = L["DEFENSE"],    checked = (STAT_FILTER_INDEX == 16), func = function() ExtVendor_SetSlotFilter(16, true); end },
+                        { text = L["DODGE"],    checked = (STAT_FILTER_INDEX == 17), func = function() ExtVendor_SetSlotFilter(17, true); end },
+                        { text = L["PARRY"],    checked = (STAT_FILTER_INDEX == 18), func = function() ExtVendor_SetSlotFilter(18, true); end },
+                        { text = L["BLOCK"],      checked = (STAT_FILTER_INDEX == 19), func = function() ExtVendor_SetSlotFilter(19, true); end },
+                        { text = L["BLOCK_VALUE"],      checked = (STAT_FILTER_INDEX == 20), func = function() ExtVendor_SetSlotFilter(20, true); end },
+                        { text = L["RESILIENCE"],      checked = (STAT_FILTER_INDEX == 21), func = function() ExtVendor_SetSlotFilter(21, true); end },
+                    },
+                },
+            },
+        },
         { text = L["FILTER_SLOT"], hasArrow = true, notCheckable = true,
             menuList = {
                 { text = ALL,                   checked = (SLOT_FILTER_INDEX == 0),  func = function() ExtVendor_SetSlotFilter(0); end },
@@ -1152,7 +1251,6 @@ end
 --========================================
 function ExtVendor_OnMouseWheel(self, delta)
     if (delta > 0) then
-        --if (MerchantFrame.page > 1) then
         if ((MerchantFrame.page > 1) and (MerchantPrevPageButton:IsEnabled()) and (MerchantPrevPageButton:IsVisible())) then
             MerchantPrevPageButton:Click();
         end
@@ -1179,8 +1277,12 @@ end
 --========================================
 -- Changes the equipment slot filter
 --========================================
-function ExtVendor_SetSlotFilter(index)
-    SLOT_FILTER_INDEX = index;
+function ExtVendor_SetSlotFilter(index, stat)
+    if stat then
+        STAT_FILTER_INDEX = index;
+    else
+        SLOT_FILTER_INDEX = index;
+    end
     ExtVendor_UpdateDisplay();
 end
 
