@@ -101,11 +101,13 @@ function ExtVendor_OnLoad(self)
     SlashCmdList["EXTVENDOR"] = ExtVendor_CommandHandler;
 
 end
+
 local function ExtVendor_AutoSell_Junk()
     if EXTVENDOR_DATA.config.enable_quickvendor_auto then
         ExtVendor_ConfirmQuickVendor()
     end
 end
+
 --========================================
 -- Hooked merchant frame OnShow
 --========================================
@@ -419,6 +421,11 @@ function ExtVendor_UpdateMerchantInfo()
     -- **************************************************
     --  Display items on merchant page
     -- **************************************************
+    local isAltCurrency = {}
+    MerchantFrame_AltCurrency1:Hide()
+    MerchantFrame_AltCurrency2:Hide()
+    MerchantFrame_AltCurrency1.icon:Hide()
+    MerchantFrame_AltCurrency2.icon:Hide()
     for i = 1, MERCHANT_ITEMS_PER_PAGE, 1 do
         local index = ((MerchantFrame.page - 1) * MERCHANT_ITEMS_PER_PAGE) + i;
 		local itemButton = _G["MerchantItem" .. i .. "ItemButton"];
@@ -426,6 +433,7 @@ function ExtVendor_UpdateMerchantInfo()
 		local merchantButton = _G["MerchantItem" .. i];
 		local merchantMoney = _G["MerchantItem" .. i .. "MoneyFrame"];
 		local merchantAltCurrency = _G["MerchantItem" .. i .. "AltCurrencyFrame"];
+
         if (index <= visibleMerchantItems) then
 			name, texture, price, quantity, numAvailable, isUsable, extendedCost = GetMerchantItemInfo(indexes[index]);
             if (name ~= nil) then
@@ -433,7 +441,7 @@ function ExtVendor_UpdateMerchantInfo()
 			    SetItemButtonCount(itemButton, quantity);
 			    SetItemButtonStock(itemButton, numAvailable);
 			    SetItemButtonTexture(itemButton, texture);
-
+                local honorPoints, arenaPoints = GetMerchantItemCostInfo(i);
                 -- update item's currency info
 			    if ( extendedCost and (price <= 0) ) then
 				    itemButton.price = nil;
@@ -445,6 +453,14 @@ function ExtVendor_UpdateMerchantInfo()
 				    merchantAltCurrency:SetPoint("BOTTOMLEFT", "MerchantItem"..i.."NameFrame", "BOTTOMLEFT", 0, 31);
 				    merchantMoney:Hide();
 				    merchantAltCurrency:Show();
+                    if honorPoints > 0 then
+                        isAltCurrency.honor = {"spell_holy_championsbond", true, "honor"}
+                    elseif arenaPoints > 0 then
+                        isAltCurrency.arena = {"spell_holy_championsbond", true, "arena"}
+                    elseif _G["MerchantItem" .. i .. "AltCurrencyFrameItem1"].itemLink then 
+                        local _, id = strsplit(":", _G["MerchantItem" .. i .. "AltCurrencyFrameItem1"].itemLink)
+                        isAltCurrency[id] = {id}
+                    end
 			    elseif ( extendedCost and (price > 0) ) then
 				    itemButton.price = price;
 				    itemButton.extendedCost = true;
@@ -456,6 +472,14 @@ function ExtVendor_UpdateMerchantInfo()
 				    merchantAltCurrency:SetPoint("LEFT", merchantMoney:GetName(), "RIGHT", -14, 0);
 				    merchantAltCurrency:Show();
 				    merchantMoney:Show();
+                    if honorPoints > 0 then
+                        isAltCurrency.honor = {"spell_holy_championsbond", true, "honor"}
+                    elseif arenaPoints > 0 then
+                        isAltCurrency.arena = {"spell_holy_championsbond", true, "arena"}
+                    elseif _G["MerchantItem" .. i .. "AltCurrencyFrameItem1"].itemLink then  
+                        local _, id = strsplit(":", _G["MerchantItem" .. i .. "AltCurrencyFrameItem1"].itemLink)
+                        isAltCurrency[id] = {id}
+                    end
 			    else
 				    itemButton.price = price;
 				    itemButton.extendedCost = nil;
@@ -477,7 +501,7 @@ function ExtVendor_UpdateMerchantInfo()
                     isBoP, isKnown = ExtVendor_GetExtendedItemInfo(itemButton.link);
                     itemId = ExtVendor_GetItemID(itemButton.link);
                     isCollectionItemKnow = C_VanityCollection.IsCollectionItemOwned(itemId);
-                    EXTVENDOR_DUMMY, EXTVENDOR_DUMMY, quality, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, EXTVENDOR_DUMMY, itemSellPrice = GetItemInfo(itemButton.link);
+                    _, _, quality, _, _, itemType, itemSubType, _, itemEquipLoc, _, _ = GetItemInfo(itemButton.link);
                 end
 
                 -- set color
@@ -607,6 +631,9 @@ function ExtVendor_UpdateMerchantInfo()
         end
     end
 
+    if isAltCurrency then
+        ExtVendor_UpdateAltCurrency(isAltCurrency)
+    end
 	MerchantFrame_UpdateRepairButtons();
 
 	-- Handle vendor buy back item
@@ -670,7 +697,7 @@ function ExtVendor_UpdateMerchantInfo()
     -- update text color for buyback slot
     local link = GetBuybackItemLink(GetNumBuybackItems());
     if (link) then
-        local EXTVENDOR_DUMMY, EXTVENDOR_DUMMY, quality = GetItemInfo(link);
+        local _, _, quality = GetItemInfo(link);
         local r, g, b = GetItemQualityColor(quality);
         MerchantBuyBackItemName:SetTextColor(r, g, b);
     end
@@ -700,7 +727,7 @@ function ExtVendor_UpdateBuybackInfo()
         if (btn) then
             link = GetBuybackItemLink(i);
             if (link) then
-                EXTVENDOR_DUMMY, EXTVENDOR_DUMMY, quality = GetItemInfo(link);
+                _, _, quality = GetItemInfo(link);
                 r, g, b = GetItemQualityColor(quality);
                 _G["MerchantItem" .. i .. "Name"]:SetTextColor(r, g, b);
             end
@@ -709,6 +736,37 @@ function ExtVendor_UpdateBuybackInfo()
     end
 end
 
+function ExtVendor_UpdateAltCurrency(currencyTable)
+    local i = 1
+    for _, currency in pairs(currencyTable) do
+        if currency[1] then
+            if currency[2] and currency[3] == "honor" then
+                _G["MerchantFrame_AltCurrency"..i].itemID = "Honor Points"
+                _G["MerchantFrame_AltCurrency"..i].icon:SetTexture("Interface\\Icons\\"..currency[1]);
+                _G["MerchantFrame_AltCurrency"..i].Lable:SetText("Honor Points: |cffffffff"..GetHonorCurrency())
+            elseif currency[2] and currency[3] == "arena" then
+                _G["MerchantFrame_AltCurrency"..i].itemID = "Arena Points"
+                _G["MerchantFrame_AltCurrency"..i].icon:SetTexture("Interface\\Icons\\"..currency[1]);
+                _G["MerchantFrame_AltCurrency"..i].Lable:SetText("Arena Points: |cffffffff"..GetArenaCurrency())
+            else
+                _G["MerchantFrame_AltCurrency"..i].itemID = currency[1]
+                _G["MerchantFrame_AltCurrency"..i].icon:SetTexture(GetItemIcon(currency[1]));
+                _G["MerchantFrame_AltCurrency"..i].Lable:SetText("|cffffffff"..GetItemCount(currency[1]))
+            end
+            if i == 2 then
+                _G["MerchantFrame_AltCurrency"..i]:ClearAllPoints()
+                _G["MerchantFrame_AltCurrency"..i]:SetPoint("RIGHT","MerchantFrame_AltCurrency1", (- MerchantFrame_AltCurrency2.Lable:GetStringWidth()) - 20,0);
+            else
+                _G["MerchantFrame_AltCurrency"..i]:ClearAllPoints()
+                _G["MerchantFrame_AltCurrency"..i]:SetPoint("RIGHT","MerchantMoneyFrameGoldButton", (- MerchantMoneyFrameGoldButtonText:GetStringWidth()) - 20,-1);
+            end
+            _G["MerchantFrame_AltCurrency"..i]:SetWidth(_G["MerchantFrame_AltCurrency"..i].Lable:GetStringWidth() + 15)
+            _G["MerchantFrame_AltCurrency"..i]:Show()
+            _G["MerchantFrame_AltCurrency"..i].icon:Show()
+            i = i + 1
+        end
+    end
+end
 --========================================
 -- Rebuilds the merchant frame into
 -- the extended design
@@ -731,6 +789,47 @@ function ExtVendor_RebuildMerchantFrame()
         ExtVendor_LastPos = MerchantFrame:GetPoint();
         MerchantFrame.isMoving = false;
     end)
+    
+    MerchantFrame.altCur = CreateFrame("Button", "MerchantFrame_AltCurrency1", MerchantFrame)
+    MerchantFrame.altCur:SetSize(100,15)
+    MerchantFrame.altCur.icon = MerchantFrame.altCur:CreateTexture("MerchantFrame_AltCurrency_Icon1","ARTWORK");
+    MerchantFrame.altCur.icon:SetSize(13,13);
+    MerchantFrame.altCur.icon:SetPoint("RIGHT", "MerchantFrame_AltCurrency1",0,0);
+	MerchantFrame.altCur.Lable = MerchantFrame.altCur:CreateFontString(nil, "BORDER", "GameFontNormal");
+    MerchantFrame.altCur.Lable:SetPoint("RIGHT", "MerchantFrame_AltCurrency_Icon1", -15, 1);
+	MerchantFrame.altCur.Lable:SetJustifyH("RIGHT");
+    MerchantFrame.altCur:SetScript("OnEnter", function(self)
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -13, -50)
+        if tonumber(MerchantFrame_AltCurrency1.itemID) then
+        GameTooltip:SetHyperlink(select(2,GetItemInfo(MerchantFrame_AltCurrency1.itemID)));
+        else
+            GameTooltip:AddLine(MerchantFrame_AltCurrency1.itemID)
+        end
+        GameTooltip:Show()
+    end)
+    MerchantFrame.altCur:SetScript("OnLeave", function () GameTooltip:Hide() end)
+    MerchantFrame.altCur:Hide()
+
+    MerchantFrame.altCur2 = CreateFrame("Button", "MerchantFrame_AltCurrency2", MerchantFrame)
+    MerchantFrame.altCur2:SetSize(100,15)
+    MerchantFrame.altCur2.icon = MerchantFrame.altCur:CreateTexture("MerchantFrame_AltCurrency_Icon2","ARTWORK");
+    MerchantFrame.altCur2.icon:SetSize(13,13);
+    MerchantFrame.altCur2.icon:SetPoint("RIGHT", "MerchantFrame_AltCurrency2",0,0);
+	MerchantFrame.altCur2.Lable = MerchantFrame.altCur2:CreateFontString(nil, "BORDER", "GameFontNormal");
+    MerchantFrame.altCur2.Lable:SetPoint("RIGHT", "MerchantFrame_AltCurrency_Icon2", -15, 1);
+	MerchantFrame.altCur2.Lable:SetJustifyH("RIGHT");
+    MerchantFrame.altCur2:SetScript("OnEnter", function(self)
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -13, -50)
+        if tonumber(MerchantFrame_AltCurrency2.itemID) then
+        GameTooltip:SetHyperlink(select(2,GetItemInfo(MerchantFrame_AltCurrency2.itemID)));
+        else
+            GameTooltip:AddLine(MerchantFrame_AltCurrency2.itemID)
+        end
+        GameTooltip:Show()
+    end)
+    MerchantFrame.altCur2:SetScript("OnLeave", function () GameTooltip:Hide() end)
+    MerchantFrame.altCur2:Hide()
+
     -- create new item buttons as needed
     for i = 1, MERCHANT_ITEMS_PER_PAGE, 1 do
         if (not _G["MerchantItem" .. i]) then
@@ -832,7 +931,6 @@ function ExtVendor_RebuildMerchantFrame()
             end
                 if IsAltKeyDown() then
                     local maxStack = GetMerchantItemMaxStack(self:GetID());
-                    print(maxStack)
                     if ( self.extendedCost ) then
                         MerchantFrame_ConfirmExtendedItemCost(self);
                     elseif ( self.price and self.price >= MERCHANT_HIGH_PRICE_COST ) then

@@ -118,7 +118,7 @@ function ExtVendor_SellJunkPopup_BuildJunkList(junkList, numBlacklisted)
             else
                 quantity = "";
             end
-            EXTVENDOR_DUMMY, EXTVENDOR_DUMMY, EXTVENDOR_DUMMY, color = GetItemQualityColor(data.quality);
+            color = select(4,GetItemQualityColor(data.quality));
             leftText:SetText(color .. "[" .. data.name .. "]|r" .. quantity);
             midText:SetText(data.reason);
             rightText:SetText(string.trim(ExtVendor_FormatMoneyString(data.stackPrice, true)));

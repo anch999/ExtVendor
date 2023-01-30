@@ -17,11 +17,11 @@ function ExtVendor_GetQuickVendorList()
         if (GetContainerNumSlots(bag)) then
             for slot = 1, GetContainerNumSlots(bag), 1 do
                 local isJunk = false;
-                EXTVENDOR_DUMMY, count = GetContainerItemInfo(bag, slot);
+                _, count = GetContainerItemInfo(bag, slot);
                 link = GetContainerItemLink(bag, slot);
                 if (link and count) then
                     isBoP, isKnown, reqClasses = ExtVendor_GetExtendedItemInfo(link);
-                    name, EXTVENDOR_DUMMY, quality, EXTVENDOR_DUMMY, EXTVENDOR_DUMMY, itemType, itemSubType, maxStack, itemEquipLoc, EXTVENDOR_DUMMY, price = GetItemInfo(link);
+                    name, _, quality, _, _, itemType, itemSubType, maxStack, itemEquipLoc, _, price = GetItemInfo(link);
 
                     -- make sure the item has a vendor price
                     if ((price or 0) > 0) then
@@ -142,7 +142,7 @@ end
 -- Performs quick-vendor
 --========================================
 function ExtVendor_ConfirmQuickVendor()
-    local link, count, name, color, quality, price, maxStack, quantity;
+    local link, count, name, color, quality, price, maxStack, quantity, itemType, itemSubType,itemEquipLoc;
     local totalPrice = 0;
     local itemsOnLine = 0;
     local numItemsSold = 0;
@@ -154,17 +154,16 @@ function ExtVendor_ConfirmQuickVendor()
     for bag = 0, 4, 1 do
         if (GetContainerNumSlots(bag)) then
             for slot = 1, GetContainerNumSlots(bag), 1 do
-                EXTVENDOR_DUMMY, count = GetContainerItemInfo(bag, slot);
-                link = GetContainerItemLink(bag, slot);
+                _, count, _, _, _, _, link = GetContainerItemInfo(bag, slot);
                 if (link and count) then
-                    name, EXTVENDOR_DUMMY, quality, EXTVENDOR_DUMMY, EXTVENDOR_DUMMY, itemType, itemSubType, maxStack, itemEquipLoc, EXTVENDOR_DUMMY, price = GetItemInfo(link);
+                    name, _, quality, _, _, itemType, itemSubType, maxStack, itemEquipLoc, _, price = GetItemInfo(link);
                     local isBoP, isKnown, reqClasses = ExtVendor_GetExtendedItemInfo(link);
 
                     if ((price or 0) > 0) then
                         if (ExtVendor_IsItemQuickVendor(link, quality, isBoP, isKnown, itemType, itemSubType, itemEquipLoc, reqClasses)) then
                             PickupContainerItem(bag, slot);
                             PickupMerchantItem(0);
-                            EXTVENDOR_DUMMY, EXTVENDOR_DUMMY, EXTVENDOR_DUMMY, color = GetItemQualityColor(quality);
+                            color = select(4,GetItemQualityColor(quality));
                             if (itemsOnLine > 0) then
                                 itemsSold = itemsSold .. ", ";
                             end
