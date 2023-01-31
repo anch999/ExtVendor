@@ -11,7 +11,6 @@ EXTVENDOR_SPECIFIC_QUALITY = false;
 
 local L = LibStub("AceLocale-3.0"):GetLocale("ExtVendor", true);
 
-local EXTVENDOR_DUMMY;
 local EXTVENDOR_NUM_PAGES = 1;
 local SLOT_FILTER_INDEX = 0;
 local STAT_FILTER_INDEX = 0;
@@ -155,10 +154,7 @@ function ExtVendor_Setup()
 
     EXTVENDOR_DATA['config']['version'] = EXTVENDOR_VERSION_ID;
 
-    ExtVendor_CheckSetting("usable_items", false);
     ExtVendor_CheckSetting("hide_filtered", false);
-    ExtVendor_CheckSetting("optimal_armor", false);
-    ExtVendor_CheckSetting("show_suboptimal_armor", false);
     ExtVendor_CheckSetting("hide_known_recipes", false);
     ExtVendor_CheckSetting("hide_known_ascension_collection_items", false);
     ExtVendor_CheckSetting("stockfilter_defall", false);
@@ -169,9 +165,7 @@ function ExtVendor_Setup()
     ExtVendor_CheckSetting("scale", 1);
     ExtVendor_CheckSetting("filter_purchased_recipes", true);
 
-    ExtVendor_CheckSetting("quickvendor_suboptimal", false);
     ExtVendor_CheckSetting("quickvendor_alreadyknown", false);
-    ExtVendor_CheckSetting("quickvendor_unusable", false);
     ExtVendor_CheckSetting("quickvendor_whitegear", false);
 
     if (EXTVENDOR_DATA['config']['show_load_message']) then
@@ -223,7 +217,7 @@ end
 function ExtVendor_UpdateButtonPositions(isBuyBack)
 
     local btn;
-    local vertSpacing;
+    local vertSpacing, horizSpacing;
 
     if (isBuyBack) then
         vertSpacing = -30;
@@ -285,16 +279,11 @@ function ExtVendor_UpdateMerchantInfo()
     local indexes = {};
     local search = string.trim(MerchantFrameSearchBox:GetText());
 	local name, texture, price, quantity, numAvailable, isUsable, extendedCost, r, g, b, notOptimal;
-    local link, quality, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemSellPrice, itemId;
+    local link, quality, itemType, itemId, itemEquipLoc;
     local isFiltered = false;
     local isBoP = false;
     local isKnown = false;
     local isCollectionItemKnow = false;
-
-    local isDarkmoonReplica = false;
-    local checkAlreadyKnown;
-    local kc;
-    local i, j;
 
     -- **************************************************
     --  Pre-check filtering if hiding filtered items
@@ -305,23 +294,18 @@ function ExtVendor_UpdateMerchantInfo()
 		    name, texture, price, quantity, numAvailable, isUsable, extendedCost = GetMerchantItemInfo(i);
             if (name) then
                 isFiltered = false;
-                isDarkmoonReplica = false;
                 link = GetMerchantItemLink(i);
                 quality = 1;
                 isKnown = false;
                 isBoP = false;
                 isCollectionItemKnow = false;
 
-                -- check if item is a darkmoon faire replica
-                if ((not isBoP) and (string.sub(name, 1, string.len(L["REPLICA"]) + 1) == (L["REPLICA"] .. " "))) then
-                    isDarkmoonReplica = true;
-                end
                 -- get info from item link
                 if (link) then
                     isBoP, isKnown = ExtVendor_GetExtendedItemInfo(link);
                     itemId = ExtVendor_GetItemID(link);
                     isCollectionItemKnow = C_VanityCollection.IsCollectionItemOwned(itemId);
-                    EXTVENDOR_DUMMY, EXTVENDOR_DUMMY, quality, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, EXTVENDOR_DUMMY, itemSellPrice = GetItemInfo(link);
+                    _, _, quality, _, _, itemType, _, _, itemEquipLoc, _, _ = GetItemInfo(link);
                 end
                 -- filter known recipes
                 if (EXTVENDOR_DATA['config']['hide_known_recipes'] and isKnown) then
@@ -351,18 +335,7 @@ function ExtVendor_UpdateMerchantInfo()
                         isFiltered = true;
                     end
                 end
-                -- check usability filter
-                if (EXTVENDOR_DATA['config']['usable_items'] and (not isUsable) and (quality ~= 7) and (not isDarkmoonReplica)) then
-                    isFiltered = true;
-                end
-                -- check optimal armor filter
-                if (EXTVENDOR_DATA['config']['optimal_armor'] and (not EXTVENDOR_DATA['config']['show_suboptimal_armor'])) then
-                    if ((quality ~= 7) and isUsable and (not isDarkmoonReplica)) then
-                        if (not ExtVendor_IsOptimalArmor(itemType, itemSubType, itemEquipLoc)) then
-                            isFiltered = true;
-                        end
-                    end
-                end
+
                 -- check slot filter
                 if (SLOT_FILTER_INDEX > 0) then
                     if (SLOT_FILTERS[SLOT_FILTER_INDEX]) then
@@ -490,7 +463,6 @@ function ExtVendor_UpdateMerchantInfo()
 				    merchantMoney:Show();
 			    end
 
-                isDarkmoonReplica = false;
                 isBoP = false;
                 isKnown = false;
                 isFiltered = false;
@@ -508,11 +480,6 @@ function ExtVendor_UpdateMerchantInfo()
                 r, g, b = GetItemQualityColor(quality);
                 _G["MerchantItem" .. i .. "Name"]:SetTextColor(r, g, b);
 
-                -- check if item is a darkmoon faire replica
-                if ((not isBOP) and (string.sub(name, 1, string.len(L["REPLICA"]) + 1) == (L["REPLICA"] .. " "))) then
-                    isDarkmoonReplica = true;
-                end
-
                 -- check filtering
                 if (not EXTVENDOR_DATA['config']['hide_filtered']) then
                     -- check search filter
@@ -520,10 +487,6 @@ function ExtVendor_UpdateMerchantInfo()
                         if (not string.find(string.lower(name), string.lower(search), 1, true)) then
                             isFiltered = true;
                         end
-                    end
-                    -- check usability filter
-                    if (EXTVENDOR_DATA['config']['usable_items'] and (not isUsable) and (quality ~= 7)) then
-                        isFiltered = true;
                     end
                     -- check quality filter
                     if (EXTVENDOR_SELECTED_QUALITY > 0) then
@@ -576,15 +539,6 @@ function ExtVendor_UpdateMerchantInfo()
                             if (not validSlot) then
                                 isFiltered = true;
                             end
-                        end
-                    end
-                end
-
-                -- filter suboptimal armor
-                if ((quality ~= 7) and isUsable and (not isDarkmoonReplica)) then
-                    if (EXTVENDOR_DATA['config']['optimal_armor']) then
-                        if (not ExtVendor_IsOptimalArmor(itemType, itemSubType, itemEquipLoc)) then
-                            isFiltered = true;
                         end
                     end
                 end
@@ -715,11 +669,6 @@ end
 function ExtVendor_UpdateBuybackInfo()
     EXTVENDOR_HOOKS["MerchantFrame_UpdateBuybackInfo"]();
     ExtVendor_UpdateButtonPositions(true);
-    --BuybackFrameTopMid:Show();
-    --BuybackFrameBotMid:Show();
-    -- local topmiddleleft = MerchantFrame:CreateTexture(nil, "BACKGROUND");
-    -- topmiddleleft:SetPoint("TOP", MerchantFrame, "TOP", 0, 0);
-    -- topmiddleleft:SetTexture("Interface\\AddOns\\ExtVendor\\textures\\UI-Merchant-TopLeftwide");
     -- apply coloring
     local btn, link, quality, r, g, b;
     for i = 1, BUYBACK_ITEMS_PER_PAGE, 1 do
@@ -1074,7 +1023,7 @@ function ExtVendor_InitQualityFilter()
             if (i == 0) then
                 info.text = ALL;
             else
-                EXTVENDOR_DUMMY, EXTVENDOR_DUMMY, EXTVENDOR_DUMMY, color = GetItemQualityColor(i);
+                color = select(4,GetItemQualityColor(i));
                 info.text = color .. _G["ITEM_QUALITY" .. i .. "_DESC"];
             end
             info.value = i;
@@ -1090,31 +1039,20 @@ end
 -- Handler for selecting an item quality
 --========================================
 function ExtVendor_SelectFilterQuality(self)
-
     ExtVendor_UIDropDownMenu_SetSelectedValue(MerchantFrameQualityFilter, self.value);
     EXTVENDOR_SELECTED_QUALITY = self.value;
 
     ExtVendor_UpdateDisplay();
-
 end
 
 --========================================
 -- Show the filter options dropdown menu
 --========================================
 function ExtVendor_DisplayFilterDropDown(self)
-
-    local className = UnitClass("player");
-    local currFilter = {};--"GetMerchantFilter();"
-    stockFilters = { { text = className, checked = ((currFilter ~= LE_LOOT_FILTER_BOE) and (currFilter ~= LE_LOOT_FILTER_ALL)), func = function() ExtVendor_SetStockFilter(LE_LOOT_FILTER_CLASS); end } };
-    table.insert(stockFilters, { text = ITEM_BIND_ON_EQUIP, checked = (currFilter == LE_LOOT_FILTER_BOE), func = function(self) ExtVendor_SetStockFilter(LE_LOOT_FILTER_BOE); end });
-    table.insert(stockFilters, { text = ALL, checked = (currFilter == LE_LOOT_FILTER_ALL), func = function() ExtVendor_SetStockFilter(LE_LOOT_FILTER_ALL); end });
-
     local menu = {
-        { text = L["HIDE_UNUSABLE"], checked = EXTVENDOR_DATA['config']['usable_items'], func = function() ExtVendor_ToggleSetting("usable_items"); ExtVendor_UpdateDisplay(); end },
         { text = L["HIDE_FILTERED"], checked = EXTVENDOR_DATA['config']['hide_filtered'], func = function() ExtVendor_ToggleSetting("hide_filtered"); ExtVendor_UpdateDisplay(); end },
         { text = L["HIDE_KNOWN_RECIPES"], checked = EXTVENDOR_DATA['config']['hide_known_recipes'], func = function() ExtVendor_ToggleSetting("hide_known_recipes"); ExtVendor_UpdateDisplay(); end },
         { text = L["HIDE_KNOWN_ASCENSION_COLLECTION_ITEMS"], checked = EXTVENDOR_DATA['config']['hide_known_ascension_collection_items'], func = function() ExtVendor_ToggleSetting("hide_known_ascension_collection_items"); ExtVendor_UpdateDisplay(); end },
-        { text = L["FILTER_SUBOPTIMAL"], checked = EXTVENDOR_DATA['config']['optimal_armor'], func = function() ExtVendor_ToggleSetting("optimal_armor"); ExtVendor_UpdateDisplay(); end },
         { text = L["FILTER_RECIPES"], hasArrow = true, notCheckable = true,
             menuList = {
                 { text = L["FILTER_ALREADY_KNOWN"], checked = EXTVENDOR_DATA['config']['hide_known_recipes'], func = function() ExtVendor_ToggleSetting("hide_known_recipes"); ExtVendor_UpdateDisplay(); end },
@@ -1223,78 +1161,10 @@ function ExtVendor_DisplayFilterDropDown(self)
                 { text = ITEM_QUALITY_COLORS[7].hex .. ITEM_QUALITY7_DESC, checked = (EXTVENDOR_SELECTED_QUALITY == 7), func = function() ExtVendor_SetSpecificQuality(7); end },
             },
         },
-    --    { text = L["STOCK_FILTER"], hasArrow = true, notCheckable = true, menuList = stockFilters },
         { text = L["CONFIGURE_QUICKVENDOR"], notCheckable = true, func = function() ExtVendor_QVConfigFrame:Show(); end },
+        { text = L["MAIN_OPTIONS"], notCheckable = true, func = function() InterfaceOptionsFrame_OpenToCategory(ExtVendorConfigContainer); end },
     };
     EasyMenu(menu, MerchantFrameFilterDropDown, self, 0, 0, "MENU", 1);
-end
-
---========================================
--- Sets the 'stock' filter and updates
--- the vendor display
---========================================
-function ExtVendor_SetStockFilter(index)
-   -- SetMerchantFilter(index);
-    ExtVendor_UpdateDisplay();
-end
-
---========================================
--- Determine if a piece of armor is the
--- best type for the player's class
--- (cloth/leather/mail/plate)
---========================================
-function ExtVendor_IsOptimalArmor(type, subType, slot)
-    if (type == L["ARMOR"]) then
-        if (slot == "INVTYPE_CLOAK") then
-            return true;
-        end
-        if ((subType == L["ARMOR_CLOTH"]) or (subType == L["ARMOR_LEATHER"]) or (subType == L["ARMOR_MAIL"]) or (subType == L["ARMOR_PLATE"])) then
-            local opt = ExtVendor_GetOptimalArmorType();
-            if (EXTVENDOR_ARMOR_RANKS[subType] < EXTVENDOR_ARMOR_RANKS[opt]) then
-                return false;
-            end
-        end
-    end
-    return true;
-end
-
---========================================
--- Returns the optimal armor type for the
--- player's class (factors in level for
--- hunters, shamans, paladins and
--- warriors), as well as the highest
--- armor type the class can ever wear
--- (regardless of level)
---========================================
-function ExtVendor_GetOptimalArmorType()
-
-    local EXTVENDOR_DUMMY, cls = UnitClass("player");
-    local lvl = UnitLevel("player");
-
-    local optArmor, maxArmor;
-
-    if ((cls == "MAGE") or (cls == "WARLOCK") or (cls == "PRIEST")) then
-        optArmor = L["ARMOR_CLOTH"];
-        maxArmor = L["ARMOR_CLOTH"];
-    elseif ((cls == "ROGUE") or (cls == "DRUID") or (cls == "MONK")) then
-        optArmor = L["ARMOR_LEATHER"];
-        maxArmor = L["ARMOR_LEATHER"];
-    elseif ((cls == "HUNTER") or (cls == "SHAMAN")) then
-        if (lvl >= 40) then
-            optArmor = L["ARMOR_MAIL"];
-        else
-            optArmor = L["ARMOR_LEATHER"];
-        end
-        maxArmor = L["ARMOR_MAIL"];
-    elseif ((cls == "PALADIN") or (cls == "WARRIOR") or (cls == "DEATHKNIGHT")) then
-        if (lvl >= 40) then
-            optArmor = L["ARMOR_PLATE"];
-        else
-            optArmor = L["ARMOR_MAIL"];
-        end
-        maxArmor = L["ARMOR_PLATE"];
-    end
-    return optArmor, maxArmor;
 end
 
 --========================================
@@ -1337,9 +1207,7 @@ end
 -- Slash command handler
 --========================================
 function ExtVendor_CommandHandler(cmd)
-
     InterfaceOptionsFrame_OpenToCategory(ExtVendorConfigContainer);
-
 end
 
 --========================================

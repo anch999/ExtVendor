@@ -1,7 +1,5 @@
 local L = LibStub("AceLocale-3.0"):GetLocale("ExtVendor", true);
 
-local EXTVENDOR_DUMMY;
-
 --========================================
 -- Popup load
 --========================================
@@ -78,7 +76,7 @@ function ExtVendor_SellJunkPopup_BuildJunkList(junkList, numBlacklisted)
     end
 
     if (table.maxn(junkList) > 0) then
-        for index, data in pairs(junkList) do
+        for _, data in pairs(junkList) do
             leftText = _G["ExtVendor_SellJunkPopupLeft" .. line];
             midText = _G["ExtVendor_SellJunkPopupMid" .. line];
             rightText = _G["ExtVendor_SellJunkPopupRight" .. line];
@@ -118,7 +116,7 @@ function ExtVendor_SellJunkPopup_BuildJunkList(junkList, numBlacklisted)
             else
                 quantity = "";
             end
-            color = select(4,GetItemQualityColor(data.quality));
+            local color = select(4,GetItemQualityColor(data.quality));
             leftText:SetText(color .. "[" .. data.name .. "]|r" .. quantity);
             midText:SetText(data.reason);
             rightText:SetText(string.trim(ExtVendor_FormatMoneyString(data.stackPrice, true)));

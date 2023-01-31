@@ -1,32 +1,28 @@
 local L = LibStub("AceLocale-3.0"):GetLocale("ExtVendor", true);
 
-local EXTVENDOR_DUMMY;
-
 --========================================
 -- Gets a list of junk items in the
 -- player's bags
 --========================================
 function ExtVendor_GetQuickVendorList()
-
     local junk = {};
-    local count, name, quality, price, maxStack;
-    local isBoP, isKnown, reqClasses;
+    local count, name, quality, price, maxStack, itemType, itemSubType, itemEquipLoc;
+    local isBoP, isKnown;
     local numBlacklisted = 0;
 
     for bag = 0, 4, 1 do
         if (GetContainerNumSlots(bag)) then
             for slot = 1, GetContainerNumSlots(bag), 1 do
-                local isJunk = false;
                 _, count = GetContainerItemInfo(bag, slot);
-                link = GetContainerItemLink(bag, slot);
+                local link = GetContainerItemLink(bag, slot);
                 if (link and count) then
-                    isBoP, isKnown, reqClasses = ExtVendor_GetExtendedItemInfo(link);
+                    isBoP, isKnown = ExtVendor_GetExtendedItemInfo(link);
                     name, _, quality, _, _, itemType, itemSubType, maxStack, itemEquipLoc, _, price = GetItemInfo(link);
 
                     -- make sure the item has a vendor price
                     if ((price or 0) > 0) then
 
-                        local isJunk, reason = ExtVendor_IsItemQuickVendor(link, quality, isBoP, isKnown, itemType, itemSubType, itemEquipLoc, reqClasses);
+                        local isJunk, reason = ExtVendor_IsItemQuickVendor(link, quality, isBoP, isKnown, itemType, itemSubType, itemEquipLoc);
 
                         if ((not isJunk) and (reason == 100)) then
                             numBlacklisted = numBlacklisted + 1;
@@ -56,13 +52,10 @@ end
 -- junk items
 --========================================
 function ExtVendor_StartQuickVendor(self)
-
     local junk, numBlacklisted = ExtVendor_GetQuickVendorList();
-
     if (junk) then
         ExtVendor_ShowJunkPopup(junk, numBlacklisted);
     end
-
 end
 
 --========================================
@@ -70,7 +63,7 @@ end
 -- quick-vendor based on quality, type,
 -- if it is already known, soulbound
 --========================================
-function ExtVendor_IsItemQuickVendor(link, quality, isSoulbound, alreadyKnown, type, subType, equipSlot, requiredClasses)
+function ExtVendor_IsItemQuickVendor(link, quality, isSoulbound, alreadyKnown, type, subType, equipSlot)
     local itemID = ExtVendor_GetItemID(link);
     -- don't vendor blacklisted items
     if (ExtVendor_IsBlacklisted(itemID)) then
@@ -115,24 +108,6 @@ function ExtVendor_IsItemQuickVendor(link, quality, isSoulbound, alreadyKnown, t
                 return true, L["QUICKVENDOR_REASON_ALREADYKNOWN"];
             end
         end
-        -- *** Unusable (class-restricted, unusable armor/weapon types) ***
-        if (EXTVENDOR_DATA['config']['quickvendor_unusable']) then
-            if (not ExtVendor_ClassIsAllowed(UnitClass("player"), requiredClasses)) then
-                return true, L["QUICKVENDOR_REASON_CLASSRESTRICTED"];
-            end
-            if (not ExtVendor_IsUsableArmorType(type, subType, equipSlot)) then
-                return true, L["QUICKVENDOR_REASON_UNUSABLEARMOR"];
-            end
-            if (not ExtVendor_IsUsableWeaponType(type, subType, equipSlot)) then
-                return true, L["QUICKVENDOR_REASON_UNUSABLEWEAPON"];
-            end
-        end
-        -- *** Sub-optimal armor ***
-        if (EXTVENDOR_DATA['config']['quickvendor_suboptimal']) then
-            if (not ExtVendor_IsOptimalArmor(type, subType, equipSlot)) then
-                return true, L["QUICKVENDOR_REASON_SUBOPTIMAL"];
-            end
-        end
     end
     -- nothing matched = do not quickvendor
     return false;
@@ -157,10 +132,10 @@ function ExtVendor_ConfirmQuickVendor()
                 _, count, _, _, _, _, link = GetContainerItemInfo(bag, slot);
                 if (link and count) then
                     name, _, quality, _, _, itemType, itemSubType, maxStack, itemEquipLoc, _, price = GetItemInfo(link);
-                    local isBoP, isKnown, reqClasses = ExtVendor_GetExtendedItemInfo(link);
+                    local isBoP, isKnown = ExtVendor_GetExtendedItemInfo(link);
 
                     if ((price or 0) > 0) then
-                        if (ExtVendor_IsItemQuickVendor(link, quality, isBoP, isKnown, itemType, itemSubType, itemEquipLoc, reqClasses)) then
+                        if (ExtVendor_IsItemQuickVendor(link, quality, isBoP, isKnown, itemType, itemSubType, itemEquipLoc)) then
                             PickupContainerItem(bag, slot);
                             PickupMerchantItem(0);
                             color = select(4,GetItemQualityColor(quality));
@@ -202,15 +177,12 @@ end
 -- item ID is blacklisted
 --========================================
 function ExtVendor_IsBlacklisted(itemId)
-
     for idx, id in pairs(EXTVENDOR_DATA['quickvendor_blacklist']) do
         if (id == itemId) then
             return true;
         end
     end
-
     return false;
-
 end
 
 --========================================

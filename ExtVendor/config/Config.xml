@@ -191,44 +191,12 @@
                                     </Slider>
                                 </Frames>
                             </Frame>
-
-                            <Frame name="$parent_FilterContainer" inherits="ExtVendor_ContainerTemplate">
+                            <Frame name="$parent_QuickVendorContainer" inherits="ExtVendor_ContainerTemplate">
                                 <Anchors>
                                     <Anchor point="TOPLEFT" relativeTo="$parent_GeneralContainer" relativePoint="BOTTOMLEFT">
                                         <Offset x="0" y="-20"/>
                                     </Anchor>
                                     <Anchor point="BOTTOMRIGHT" relativeTo="$parent_GeneralContainer" relativePoint="BOTTOMRIGHT">
-                                        <Offset x="0" y="-100"/>
-                                    </Anchor>
-                                </Anchors>
-                                <Frames>
-                                    <CheckButton id="10" name="$parent_ShowSuboptimalArmor" inherits="ExtVendor_CheckBoxTemplate">
-                                        <Anchors>
-                                            <Anchor point="TOPLEFT">
-                                                <Offset>
-                                                    <AbsDimension x="10" y="-10"/>
-                                                </Offset>
-                                            </Anchor>
-                                        </Anchors>
-                                    </CheckButton>
-                                    <CheckButton id="11" name="$parent_StockDefaultAll" inherits="ExtVendor_CheckBoxTemplate">
-                                        <Anchors>
-                                            <Anchor point="TOPLEFT">
-                                                <Offset>
-                                                    <AbsDimension x="10" y="-40"/>
-                                                </Offset>
-                                            </Anchor>
-                                        </Anchors>
-                                    </CheckButton>
-                                </Frames>
-                            </Frame>
-
-                            <Frame name="$parent_QuickVendorContainer" inherits="ExtVendor_ContainerTemplate">
-                                <Anchors>
-                                    <Anchor point="TOPLEFT" relativeTo="$parent_FilterContainer" relativePoint="BOTTOMLEFT">
-                                        <Offset x="0" y="-20"/>
-                                    </Anchor>
-                                    <Anchor point="BOTTOMRIGHT" relativeTo="$parent_FilterContainer" relativePoint="BOTTOMRIGHT">
                                         <Offset x="0" y="-190"/>
                                     </Anchor>
                                 </Anchors>
@@ -251,7 +219,7 @@
                                             </Anchor>
                                         </Anchors>
                                     </CheckButton>
-                                    <CheckButton id="21" name="$parent_SuboptimalArmor" inherits="ExtVendor_CheckBoxTemplate">
+                                    <CheckButton id="22" name="$parent_AlreadyKnown" inherits="ExtVendor_CheckBoxTemplate">
                                         <Anchors>
                                             <Anchor point="TOPLEFT">
                                                 <Offset>
@@ -260,20 +228,11 @@
                                             </Anchor>
                                         </Anchors>
                                     </CheckButton>
-                                    <CheckButton id="22" name="$parent_AlreadyKnown" inherits="ExtVendor_CheckBoxTemplate">
-                                        <Anchors>
-                                            <Anchor point="TOPLEFT">
-                                                <Offset>
-                                                    <AbsDimension x="10" y="-100"/>
-                                                </Offset>
-                                            </Anchor>
-                                        </Anchors>
-                                    </CheckButton>
                                     <CheckButton id="23" name="$parent_WhiteGear" inherits="ExtVendor_CheckBoxTemplate">
                                         <Anchors>
                                             <Anchor point="TOPLEFT">
                                                 <Offset>
-                                                    <AbsDimension x="10" y="-130"/>
+                                                    <AbsDimension x="10" y="-100"/>
                                                 </Offset>
                                             </Anchor>
                                         </Anchors>

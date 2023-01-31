@@ -143,22 +143,22 @@ end
 
 function ExtVendor_QVConfig_OnShow()
     local count = { 0, 0, 0 }
-    local function loadIDs(id, cNum, list)
-        if GetItemInfo(id) then count[cNum] = count[cNum] - 1 return end
+    local function loadIDs(id, list)
+        if GetItemInfo(id) then count[list] = count[list] - 1 return end
         local item = Item:CreateFromID(id);
-			item:ContinueOnLoad(function(itemId)
+			item:ContinueOnLoad(function()
 				if item:GetInfo() then
-					if count[cNum] == 1 then
-                        if list == "black" then
+					if count[list] == 1 then
+                        if list == 1 then
                             ExtVendor_QVConfig_Blacklist_Update();
-                        elseif list == "Gwhite" then
+                        elseif list == 2 then
                             ExtVendor_QVConfig_GlobalWhitelist_Update();
-                        elseif list == "Pwhite" then
+                        elseif list == 3 then
                             ExtVendor_QVConfig_LocalWhitelist_Update();
                         end
                     end
 				end
-                count[cNum] = count[cNum] - 1
+                count[list] = count[list] - 1
 			end)
     end
 
@@ -171,15 +171,15 @@ function ExtVendor_QVConfig_OnShow()
         FIRST_ONSHOW = false;
         count[1] = #EXTVENDOR_DATA['quickvendor_blacklist']
         for _, id in ipairs(EXTVENDOR_DATA['quickvendor_blacklist']) do
-            loadIDs(id, 1,"black");
+            loadIDs(id, 1);
         end
         count[2] = #EXTVENDOR_DATA['quickvendor_whitelist']
         for _, id in ipairs(EXTVENDOR_DATA['quickvendor_whitelist']) do
-            loadIDs(id, 2,"Gwhite");
+            loadIDs(id, 2);
         end
         count[3] = #EXTVENDOR_DATA[EXTVENDOR_PROFILE]['quickvendor_whitelist']
         for _, id in ipairs(EXTVENDOR_DATA[EXTVENDOR_PROFILE]['quickvendor_whitelist']) do
-            loadIDs(id, 3,"Pwhite");
+            loadIDs(id, 3);
         end
     end
 end
