@@ -43,20 +43,11 @@
                         </Anchor>
                     </Anchors>
                 </FontString>
-                <FontString name="$parentEmail" inherits="GameFontNormal">
+                <FontString name="$parentURLs" inherits="GameFontNormal">
                     <Anchors>
                         <Anchor point="TOPLEFT" relativeTo="$parentAuthor" relativePoint="BOTTOMLEFT">
                             <Offset>
                                 <AbsDimension x="0" y="-10"/>
-                            </Offset>
-                        </Anchor>
-                    </Anchors>
-                </FontString>
-                <FontString name="$parentURLs" inherits="GameFontNormal">
-                    <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="$parentEmail" relativePoint="BOTTOMLEFT">
-                            <Offset>
-                                <AbsDimension x="0" y="-40"/>
                             </Offset>
                         </Anchor>
                     </Anchors>

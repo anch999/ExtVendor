@@ -146,13 +146,13 @@ function ExtVendorConfig_CheckBox_OnClick(self, id)
         else
             EXTVENDOR_DATA['config']['enable_quickvendor'] = false;
         end
+        ExtVendor_UpdateQuickVendorButtonVisibility();
     elseif (id == 21) then
         if (self:GetChecked()) then
             EXTVENDOR_DATA['config']['enable_quickvendor_auto'] = true;
         else
             EXTVENDOR_DATA['config']['enable_quickvendor_auto'] = false;
         end
-        ExtVendor_UpdateQuickVendorButtonVisibility();
     elseif (id == 22) then
 		if (self:GetChecked()) then
 		    EXTVENDOR_DATA['config']['quickvendor_alreadyknown'] = true;

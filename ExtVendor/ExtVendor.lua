@@ -261,7 +261,7 @@ function ExtVendor_UpdateButtonPositions(isBuyBack)
     end
 
 end
-
+local numButtons = 0
 --========================================
 -- Show merchant page
 --========================================
@@ -395,10 +395,14 @@ function ExtVendor_UpdateMerchantInfo()
     --  Display items on merchant page
     -- **************************************************
     local isAltCurrency = {}
-    MerchantFrame_AltCurrency1:Hide()
-    MerchantFrame_AltCurrency2:Hide()
-    MerchantFrame_AltCurrency1.icon:Hide()
-    MerchantFrame_AltCurrency2.icon:Hide()
+    
+    if numButtons then
+        for i = 1, numButtons, 1 do
+            _G["MerchantFrame_AltCurrency"..i]:Hide()
+            _G["MerchantFrame_AltCurrency_Icon"..i]:Hide()
+        end
+    end
+
     for i = 1, MERCHANT_ITEMS_PER_PAGE, 1 do
         local index = ((MerchantFrame.page - 1) * MERCHANT_ITEMS_PER_PAGE) + i;
 		local itemButton = _G["MerchantItem" .. i .. "ItemButton"];
@@ -685,33 +689,66 @@ function ExtVendor_UpdateBuybackInfo()
     end
 end
 
+local function createAtlCurrencys(num)
+    if _G["MerchantFrame_AltCurrency"..num] then return _G["MerchantFrame_AltCurrency"..num] end
+    local altCurrencyFrame = "MerchantFrame_AltCurrency"..num
+    local altCurrencyFrameIcon = "MerchantFrame_AltCurrency_Icon"..num
+    local button = CreateFrame("Button", altCurrencyFrame, MerchantFrame)
+    button:SetSize(100,15)
+    button.icon = button:CreateTexture(altCurrencyFrameIcon,"ARTWORK");
+    button.icon:SetSize(13,13);
+    button.icon:SetPoint("RIGHT", altCurrencyFrame,0,0);
+	button.Lable = button:CreateFontString(nil, "BORDER", "GameFontNormal");
+    button.Lable:SetPoint("RIGHT", altCurrencyFrameIcon, -15, 1);
+	button.Lable:SetJustifyH("RIGHT");
+    button:SetScript("OnLeave", function () GameTooltip:Hide() end)
+    button:Hide()
+    numButtons = numButtons + 1
+    return _G[altCurrencyFrame]
+end
+
+local function setTooltip(button)
+    button:SetScript("OnEnter", function(self)
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -13, -50)
+        if tonumber(button.itemID) then
+        GameTooltip:SetHyperlink(select(2,GetItemInfo(button.itemID)));
+        else
+            GameTooltip:AddLine(button.itemID)
+        end
+        GameTooltip:Show()
+    end)
+end
+
 function ExtVendor_UpdateAltCurrency(currencyTable)
     local i = 1
     for _, currency in pairs(currencyTable) do
         if currency[1] then
+            local button = createAtlCurrencys(i)
             if currency[2] and currency[3] == "honor" then
-                _G["MerchantFrame_AltCurrency"..i].itemID = "Honor Points"
-                _G["MerchantFrame_AltCurrency"..i].icon:SetTexture("Interface\\Icons\\"..currency[1]);
-                _G["MerchantFrame_AltCurrency"..i].Lable:SetText("Honor Points: |cffffffff"..GetHonorCurrency())
+                button.itemID = "Honor Points"
+                button.icon:SetTexture("Interface\\Icons\\"..currency[1]);
+                button.Lable:SetText("Honor Points: |cffffffff"..GetHonorCurrency())
             elseif currency[2] and currency[3] == "arena" then
-                _G["MerchantFrame_AltCurrency"..i].itemID = "Arena Points"
-                _G["MerchantFrame_AltCurrency"..i].icon:SetTexture("Interface\\Icons\\"..currency[1]);
-                _G["MerchantFrame_AltCurrency"..i].Lable:SetText("Arena Points: |cffffffff"..GetArenaCurrency())
+                button.itemID = "Arena Points"
+                button.icon:SetTexture("Interface\\Icons\\"..currency[1]);
+                button.Lable:SetText("Arena Points: |cffffffff"..GetArenaCurrency())
             else
-                _G["MerchantFrame_AltCurrency"..i].itemID = currency[1]
-                _G["MerchantFrame_AltCurrency"..i].icon:SetTexture(GetItemIcon(currency[1]));
-                _G["MerchantFrame_AltCurrency"..i].Lable:SetText("|cffffffff"..GetItemCount(currency[1]))
+                button.itemID = currency[1]
+                button.icon:SetTexture(GetItemIcon(currency[1]));
+                button.Lable:SetText("|cffffffff"..GetItemCount(currency[1]))
             end
-            if i == 2 then
-                _G["MerchantFrame_AltCurrency"..i]:ClearAllPoints()
-                _G["MerchantFrame_AltCurrency"..i]:SetPoint("RIGHT","MerchantFrame_AltCurrency1", (- MerchantFrame_AltCurrency2.Lable:GetStringWidth()) - 20,0);
+            setTooltip(button)
+            if i == 1 then
+                button:ClearAllPoints()
+                button:SetPoint("RIGHT","MerchantMoneyFrameGoldButton", (- MerchantMoneyFrameGoldButtonText:GetStringWidth()) - 20,-1);
             else
-                _G["MerchantFrame_AltCurrency"..i]:ClearAllPoints()
-                _G["MerchantFrame_AltCurrency"..i]:SetPoint("RIGHT","MerchantMoneyFrameGoldButton", (- MerchantMoneyFrameGoldButtonText:GetStringWidth()) - 20,-1);
+                local lastFrame = i - 1
+                button:ClearAllPoints()
+                button:SetPoint("RIGHT",_G["MerchantFrame_AltCurrency"..lastFrame], (- button.Lable:GetStringWidth()) - 20,0);
             end
-            _G["MerchantFrame_AltCurrency"..i]:SetWidth(_G["MerchantFrame_AltCurrency"..i].Lable:GetStringWidth() + 15)
-            _G["MerchantFrame_AltCurrency"..i]:Show()
-            _G["MerchantFrame_AltCurrency"..i].icon:Show()
+            button:SetWidth(button.Lable:GetStringWidth() + 15)
+            button:Show()
+            button.icon:Show()
             i = i + 1
         end
     end
@@ -739,46 +776,6 @@ function ExtVendor_RebuildMerchantFrame()
         MerchantFrame.isMoving = false;
     end)
     
-    MerchantFrame.altCur = CreateFrame("Button", "MerchantFrame_AltCurrency1", MerchantFrame)
-    MerchantFrame.altCur:SetSize(100,15)
-    MerchantFrame.altCur.icon = MerchantFrame.altCur:CreateTexture("MerchantFrame_AltCurrency_Icon1","ARTWORK");
-    MerchantFrame.altCur.icon:SetSize(13,13);
-    MerchantFrame.altCur.icon:SetPoint("RIGHT", "MerchantFrame_AltCurrency1",0,0);
-	MerchantFrame.altCur.Lable = MerchantFrame.altCur:CreateFontString(nil, "BORDER", "GameFontNormal");
-    MerchantFrame.altCur.Lable:SetPoint("RIGHT", "MerchantFrame_AltCurrency_Icon1", -15, 1);
-	MerchantFrame.altCur.Lable:SetJustifyH("RIGHT");
-    MerchantFrame.altCur:SetScript("OnEnter", function(self)
-        GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -13, -50)
-        if tonumber(MerchantFrame_AltCurrency1.itemID) then
-        GameTooltip:SetHyperlink(select(2,GetItemInfo(MerchantFrame_AltCurrency1.itemID)));
-        else
-            GameTooltip:AddLine(MerchantFrame_AltCurrency1.itemID)
-        end
-        GameTooltip:Show()
-    end)
-    MerchantFrame.altCur:SetScript("OnLeave", function () GameTooltip:Hide() end)
-    MerchantFrame.altCur:Hide()
-
-    MerchantFrame.altCur2 = CreateFrame("Button", "MerchantFrame_AltCurrency2", MerchantFrame)
-    MerchantFrame.altCur2:SetSize(100,15)
-    MerchantFrame.altCur2.icon = MerchantFrame.altCur:CreateTexture("MerchantFrame_AltCurrency_Icon2","ARTWORK");
-    MerchantFrame.altCur2.icon:SetSize(13,13);
-    MerchantFrame.altCur2.icon:SetPoint("RIGHT", "MerchantFrame_AltCurrency2",0,0);
-	MerchantFrame.altCur2.Lable = MerchantFrame.altCur2:CreateFontString(nil, "BORDER", "GameFontNormal");
-    MerchantFrame.altCur2.Lable:SetPoint("RIGHT", "MerchantFrame_AltCurrency_Icon2", -15, 1);
-	MerchantFrame.altCur2.Lable:SetJustifyH("RIGHT");
-    MerchantFrame.altCur2:SetScript("OnEnter", function(self)
-        GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -13, -50)
-        if tonumber(MerchantFrame_AltCurrency2.itemID) then
-        GameTooltip:SetHyperlink(select(2,GetItemInfo(MerchantFrame_AltCurrency2.itemID)));
-        else
-            GameTooltip:AddLine(MerchantFrame_AltCurrency2.itemID)
-        end
-        GameTooltip:Show()
-    end)
-    MerchantFrame.altCur2:SetScript("OnLeave", function () GameTooltip:Hide() end)
-    MerchantFrame.altCur2:Hide()
-
     -- create new item buttons as needed
     for i = 1, MERCHANT_ITEMS_PER_PAGE, 1 do
         if (not _G["MerchantItem" .. i]) then

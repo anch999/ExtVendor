@@ -4,7 +4,7 @@ if L then
 
 L["LOADED_MESSAGE"] = "Version %s loaded. Type |cffffff00/evui|r to configure.";
 L["ADDON_TITLE"] = "Extended Vendor UI";
-L["VERSION_TEXT"] = "Extended Vendor UI %s";
+L["VERSION_TEXT"] = "Extended Vendor UI Ascension %s";
 
 L["QUICKVENDOR_BUTTON_TOOLTIP"] = "Sell all unwanted items";
 
@@ -169,7 +169,7 @@ L["BASIC_SETTINGS"] = "Basic Settings";
 L["ABOUT"] = "About";
 L["LABEL_AUTHOR"] = "Author";
 L["LABEL_EMAIL"] = "Email";
-L["LABEL_HOSTS"] = "Download Site(s)";
+L["LABEL_HOSTS"] = "Discord";
 
 L["COPYRIGHT"] = "�2012, All rights reserved.";
 

@@ -1,10 +1,10 @@
 ## Interface: 30300
-## Title: Extended Vendor UI |cffffffffv1.5.2
+## Title: Extended Vendor UI Ascension |cffffffffv1.2.6
 ## Notes: Extends the merchant interface for easier browsing.
-## Author: Germbread
-## Version: 1.5.2
+## Author: Ascension Version: Anch - Area-52 (Original Author: Germbread)
+## Version: 1.2.6
 ## SavedVariables: EXTVENDOR_DATA
-## X-Email: germbread@gmail.com
+## X-Website: https://discord.gg/nEqQmp9UMf
 
 lib\LibStub.lua
 lib\AceLocale-3.0.lua
