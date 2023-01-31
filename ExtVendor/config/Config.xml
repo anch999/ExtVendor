@@ -76,7 +76,7 @@
                 </FontString>
             </Layer>
         </Layers>
-        <Backdrop bgFile="Interface\AddOns\ExtVendor\InterfaceElements\UI-Tooltip-Background" edgeFile="Interface\AddOns\ExtVendor\InterfaceElements\UI-Tooltip-Border" tile="true">
+        <Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
             <BorderColor r="0.5" g="0.5" b="0.5"/>
             <Color r="0.25" g="0.25" b="0.25" a="0.5"/>
             <BackgroundInsets>

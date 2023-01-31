@@ -7,7 +7,7 @@
         </Size>
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture name="$parentSelection" file="Interface\AddOns\ExtVendor\InterfaceElements\UI-QuestLogTitleHighlight" alphaMode="ADD" hidden="true">
+                <Texture name="$parentSelection" file="Interface\QuestFrame\UI-QuestLogTitleHighlight" alphaMode="ADD" hidden="true">
                     <Color r="1" g="0.8" b="0" a="0.7"/>
                 </Texture>
             </Layer>
@@ -42,7 +42,7 @@
                 ExtVendor_QVConfig_SelectItemListButton(self);
             </OnClick>
         </Scripts>
-		<HighlightTexture file="Interface\AddOns\ExtVendor\InterfaceElements\UI-QuestLogTitleHighlight" alphaMode="ADD">
+		<HighlightTexture file="Interface\QuestFrame\UI-QuestLogTitleHighlight" alphaMode="ADD">
 			<Anchors>
 				<Anchor point="TOPLEFT">	
 					<Offset>
@@ -86,7 +86,7 @@
 
     <Frame name="ExtVendor_ItemListTemplate" virtual="true">
         <Size x="430" y="120"/>
-        <Backdrop bgFile="Interface\AddOns\ExtVendor\InterfaceElements\UI-DialogBox-Background" edgeFile="Interface\AddOns\ExtVendor\InterfaceElements\UI-Tooltip-Border" tile="true">
+        <Backdrop bgFile="Interface\Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
             <EdgeSize>
                 <AbsValue val="16"/>
             </EdgeSize>
@@ -131,7 +131,7 @@
 		</Size>
 		<Layers>
 			<Layer level="BACKGROUND">
-				<Texture name="$parentLeft" file="Interface\AddOns\ExtVendor\InterfaceElements\UI-Silver-Button-Up">
+				<Texture name="$parentLeft" file="Interface\Buttons\UI-Silver-Button-Up">
 					<Size>
 						<AbsDimension x="12" y="22"/>
 					</Size>
@@ -141,7 +141,7 @@
 					</Anchors>
 					<TexCoords left="0" right="0.09375" top="0" bottom="0.79"/>
 				</Texture>
-				<Texture name="$parentRight" file="Interface\AddOns\ExtVendor\InterfaceElements\UI-Silver-Button-Up">
+				<Texture name="$parentRight" file="Interface\Buttons\UI-Silver-Button-Up">
 					<Size>
 						<AbsDimension x="12" y="18"/>
 					</Size>
@@ -151,7 +151,7 @@
 					</Anchors>
 					<TexCoords left="0.53125" right="0.625" top="0" bottom="0.79"/>
 				</Texture>
-				<Texture name="$parentMiddle" file="Interface\AddOns\ExtVendor\InterfaceElements\UI-Silver-Button-Up">
+				<Texture name="$parentMiddle" file="Interface\Buttons\UI-Silver-Button-Up">
 					<Size>
 						<AbsDimension x="12" y="22"/>
 					</Size>
@@ -163,7 +163,7 @@
 				</Texture>
 			</Layer>
 			<Layer level="ARTWORK">
-				<Texture name="$parentLeftArrow" file="Interface\AddOns\ExtVendor\InterfaceElements\ChatFrameExpandArrow" hidden="true" parentKey="leftArrow">
+				<Texture name="$parentLeftArrow" file="Interface\ChatFrame\ChatFrameExpandArrow" hidden="true" parentKey="leftArrow">
 					<Size>
 						<AbsDimension x="10" y="12"/>
 					</Size>
@@ -172,7 +172,7 @@
 					</Anchors>
 					<TexCoords left="1" right="0" top="0" bottom="1"/>
 				</Texture>
-				<Texture name="$parentRightArrow" file="Interface\AddOns\ExtVendor\InterfaceElements\ChatFrameExpandArrow" hidden="true" parentKey="rightArrow">
+				<Texture name="$parentRightArrow" file="Interface\ChatFrame\ChatFrameExpandArrow" hidden="true" parentKey="rightArrow">
 					<Size>
 						<AbsDimension x="10" y="12"/>
 					</Size>
@@ -183,20 +183,12 @@
 			</Layer>
 		</Layers>
 		<Scripts>
-			<!--OnLoad>
-				if ( not self:IsEnabled() ) then
-					local name = self:GetName();
-					_G[name.."Left"]:SetTexture("Interface\AddOns\ExtVendor\PandaLua\InterfaceElements\\Buttons\\UI-Panel-Button-Disabled");
-					_G[name.."Middle"]:SetTexture("Interface\AddOns\ExtVendor\PandaLua\InterfaceElements\\Buttons\\UI-Panel-Button-Disabled");
-					_G[name.."Right"]:SetTexture("Interface\AddOns\ExtVendor\PandaLua\InterfaceElements\\Buttons\\UI-Panel-Button-Disabled");
-				end
-			</OnLoad-->
 			<OnMouseDown>
 				if ( self:IsEnabled() ) then
 					local name = self:GetName();
-					_G[name.."Left"]:SetTexture("Interface\\AddOns\\ExtVendor\\InterfaceElements\\UI-Silver-Button-Down");
-					_G[name.."Middle"]:SetTexture("Interface\\AddOns\\ExtVendor\\InterfaceElements\\UI-Silver-Button-Down");
-					_G[name.."Right"]:SetTexture("Interface\\AddOns\\ExtVendor\\InterfaceElements\\UI-Silver-Button-Down");
+					_G[name.."Left"]:SetTexture("Interface\Buttons\UI-Silver-Button-Down");
+					_G[name.."Middle"]:SetTexture("Interface\Buttons\UI-Silver-Button-Down");
+					_G[name.."Right"]:SetTexture("Interface\Buttons\UI-Silver-Button-Down");
 				end
 				self.rightArrow:SetPoint("RIGHT", -4, -1);
 				self.leftArrow:SetPoint("LEFT",  6, -1);
@@ -204,9 +196,9 @@
 			<OnMouseUp>
 				if ( self:IsEnabled() ) then
 					local name = self:GetName();
-					_G[name.."Left"]:SetTexture("Interface\\AddOns\\ExtVendor\\InterfaceElements\\UI-Silver-Button-Up");
-					_G[name.."Middle"]:SetTexture("Interface\\AddOns\\ExtVendor\\InterfaceElements\\UI-Silver-Button-Up");
-					_G[name.."Right"]:SetTexture("Interface\\AddOns\\ExtVendor\\InterfaceElements\\UI-Silver-Button-Up");
+					_G[name.."Left"]:SetTexture("Interface\Buttons\UI-Silver-Button-Up");
+					_G[name.."Middle"]:SetTexture("Interface\Buttons\UI-Silver-Button-Up");
+					_G[name.."Right"]:SetTexture("Interface\Buttons\UI-Silver-Button-Up");
 				end				
 				self.rightArrow:SetPoint("RIGHT", -5, 0);
 				self.leftArrow:SetPoint("LEFT",  5, 0);
@@ -215,22 +207,16 @@
 				if ( self:IsEnabled() ) then
 					-- we need to reset our textures just in case we were hidden before a mouse up fired
 					local name = self:GetName();
-					_G[name.."Left"]:SetTexture("Interface\\AddOns\\ExtVendor\\InterfaceElements\\UI-Silver-Button-Up");
-					_G[name.."Middle"]:SetTexture("Interface\\AddOns\\ExtVendor\\InterfaceElements\\UI-Silver-Button-Up");
-					_G[name.."Right"]:SetTexture("Interface\\AddOns\\ExtVendor\\InterfaceElements\\UI-Silver-Button-Up");
+					_G[name.."Left"]:SetTexture("Interface\Buttons\UI-Silver-Button-Up");
+					_G[name.."Middle"]:SetTexture("Interface\Buttons\UI-Silver-Button-Up");
+					_G[name.."Right"]:SetTexture("Interface\Buttons\UI-Silver-Button-Up");
 				end
 			</OnShow>
-			<!--OnDisable>
-				local name = self:GetName();
-				_G[name.."Left"]:SetTexture("Interface\AddOns\ExtVendor\PandaLua\InterfaceElements\\Buttons\\UI-Panel-Button-Disabled");
-				_G[name.."Middle"]:SetTexture("Interface\AddOns\ExtVendor\PandaLua\InterfaceElements\\Buttons\\UI-Panel-Button-Disabled");
-				_G[name.."Right"]:SetTexture("Interface\AddOns\ExtVendor\PandaLua\InterfaceElements\\Buttons\\UI-Panel-Button-Disabled");
-			</OnDisable-->
 			<OnEnable>
 				local name = self:GetName();
-				_G[name.."Left"]:SetTexture("Interface\\AddOns\\ExtVendor\\InterfaceElements\\UI-Silver-Button-Up");
-				_G[name.."Middle"]:SetTexture("Interface\\AddOns\\ExtVendor\\InterfaceElements\\UI-Silver-Button-Up");
-				_G[name.."Right"]:SetTexture("Interface\\AddOns\\ExtVendor\\InterfaceElements\\UI-Silver-Button-Up");
+				_G[name.."Left"]:SetTexture("Interface\Buttons\UI-Silver-Button-Up");
+				_G[name.."Middle"]:SetTexture("Interface\Buttons\UI-Silver-Button-Up");
+				_G[name.."Right"]:SetTexture("Interface\Buttons\UI-Silver-Button-Up");
 			</OnEnable>
 			<OnEnter>
 				if(self.tooltipText ~= nil) then
@@ -255,7 +241,7 @@
 		<NormalFont style="GameFontHighlightSmall"/>
 		<HighlightFont style="GameFontHighlightSmall"/>
 		<DisabledFont style="GameFontDisableSmall"/>
-		<HighlightTexture file="Interface\AddOns\ExtVendor\InterfaceElements\UI-Silver-Button-Highlight" alphaMode="ADD">
+		<HighlightTexture file="Interface\Buttons\UI-Silver-Button-Highlight" alphaMode="ADD">
 			<TexCoords left="0" right="1.0" top="0.03" bottom="0.7175"/>	
 		</HighlightTexture>
 	</Button>

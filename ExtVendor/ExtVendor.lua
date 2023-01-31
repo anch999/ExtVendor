@@ -841,10 +841,10 @@ function ExtVendor_RebuildMerchantFrame()
     junkBtn:SetScript("OnClick", ExtVendor_StartQuickVendor);
     junkBtn:SetScript("OnEnter", ExtVendor_ShowButtonTooltip);
     junkBtn:SetScript("OnLeave", ExtVendor_HideButtonTooltip);
-    junkBtn:SetPushedTexture("Interface\\AddOns\\ExtVendor\\InterfaceElements\\UI-Quickslot-Depress");
-    junkBtn:SetHighlightTexture("Interface\\AddOns\\ExtVendor\\InterfaceElements\\ButtonHilight-Square", "ADD");
+    junkBtn:SetPushedTexture("Interface\\Buttons\\UI-Quickslot-Depress");
+    junkBtn:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square", "ADD");
     junkBtn.junkBtnIcon = junkBtn:CreateTexture("MerchantFrameSellJunkButtonIcon", "BORDER");
-    junkBtn.junkBtnIcon:SetTexture("Interface\\AddOns\\ExtVendor\\InterfaceElements\\Inv_Misc_Bag_10");
+    junkBtn.junkBtnIcon:SetTexture("Interface\\Icons\\inv_misc_bag_10");
     junkBtn.junkBtnIcon:SetPoint("TOPLEFT", junkBtn, "TOPLEFT", 0, 0);
     junkBtn.junkBtnIcon:SetPoint("BOTTOMRIGHT", junkBtn, "BOTTOMRIGHT", 0, 0);
 
