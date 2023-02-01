@@ -689,6 +689,25 @@ function ExtVendor_UpdateBuybackInfo()
     end
 end
 
+local function pairsByKeys(t)
+    local a = {}
+    for n in pairs(t) do
+      table.insert(a, n)
+    end
+    table.sort(a)
+  
+    local i = 0
+    local iter = function()
+      i = i + 1
+      if a[i] == nil then
+        return nil
+      else
+        return a[i], t[a[i]]
+      end
+    end
+    return iter
+end
+
 local function createAtlCurrencys(num)
     if _G["MerchantFrame_AltCurrency"..num] then return _G["MerchantFrame_AltCurrency"..num] end
     local altCurrencyFrame = "MerchantFrame_AltCurrency"..num
@@ -721,7 +740,12 @@ end
 
 function ExtVendor_UpdateAltCurrency(currencyTable)
     local i = 1
-    for _, currency in pairs(currencyTable) do
+    local sorted = {}
+    for _, v in pairs(currencyTable) do
+        sorted[GetItemInfo(v[1])] = v
+    end
+    table.sort(sorted)
+    for _,currency in pairsByKeys(sorted) do
         if currency[1] then
             local button = createAtlCurrencys(i)
             if currency[2] and currency[3] == "honor" then
