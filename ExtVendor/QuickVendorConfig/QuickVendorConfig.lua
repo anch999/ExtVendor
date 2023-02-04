@@ -239,13 +239,26 @@ end
 
 function ExtVendor_QVConfig_Blacklist_Update()
 
+    local sort = {}
+    for _, item in ipairs(EXTVENDOR_DATA['quickvendor_blacklist']) do
+        if GetItemInfo(item) then
+            sort[GetItemInfo(item)] = item
+        end
+    end
+    table.sort(sort)
+
+    local sorted = {}
+    for _, item in ExtVendor_PairsByKeys(sort) do
+        tinsert(sorted,item)
+    end
+
     local scrollFrame = ExtVendor_QVConfigFrame_BlacklistItemList;
 	local offset = ExtVendor_HybridScrollFrame_GetOffset(scrollFrame);
 	local buttons = scrollFrame.buttons;
 	local numButtons = #buttons;
-    local numBlacklisted = table.maxn(EXTVENDOR_DATA['quickvendor_blacklist']);
+    local numBlacklisted = table.maxn(sorted);
     local selection = scrollFrame.selection or -1;
-	--local selection = scrollFrame.selection;
+    scrollFrame.itemID = sorted
 
 	local blacklistIndex;
 	local displayedHeight = 0;
@@ -254,8 +267,8 @@ function ExtVendor_QVConfig_Blacklist_Update()
 		if (blacklistIndex > numBlacklisted) then
 			buttons[i]:Hide();
 		else
-            local itemID = EXTVENDOR_DATA['quickvendor_blacklist'][blacklistIndex];
-            local itemName, itemLink, itemRarity, _X, _X, _X, _X, _X, _X, itemTexture = GetItemInfo(itemID);
+            local itemID = sorted[blacklistIndex];
+            local itemName, _, itemRarity, _, _, _, _, _, _, itemTexture = GetItemInfo(itemID);
             buttons[i].index = blacklistIndex;
             local displayName = "|cffff0000" .. L["UNKNOWN_ITEM"];
             if (itemName and itemRarity) then
@@ -274,13 +287,26 @@ end
 
 function ExtVendor_QVConfig_GlobalWhitelist_Update()
 
+    local sort = {}
+    for _, item in ipairs(EXTVENDOR_DATA['quickvendor_whitelist']) do
+        if GetItemInfo(item) then
+            sort[GetItemInfo(item)] = item
+        end
+    end
+    table.sort(sort)
+
+    local sorted = {}
+    for _,item in ExtVendor_PairsByKeys(sort) do
+        tinsert(sorted,item)
+    end
+
     local scrollFrame = ExtVendor_QVConfigFrame_GlobalWhitelistItemList;
 	local offset = ExtVendor_HybridScrollFrame_GetOffset(scrollFrame);
 	local buttons = scrollFrame.buttons;
 	local numButtons = #buttons;
-    local numBlacklisted = table.maxn(EXTVENDOR_DATA['quickvendor_whitelist']);
+    local numBlacklisted = table.maxn(sorted);
     local selection = scrollFrame.selection or -1;
-	--local selection = scrollFrame.selection;
+    scrollFrame.itemID = sorted
 
 	local blacklistIndex;
 	local displayedHeight = 0;
@@ -289,9 +315,10 @@ function ExtVendor_QVConfig_GlobalWhitelist_Update()
 		if (blacklistIndex > numBlacklisted) then
 			buttons[i]:Hide();
 		else
-            local itemID = EXTVENDOR_DATA['quickvendor_whitelist'][blacklistIndex];
-            local itemName, itemLink, itemRarity, _X, _X, _X, _X, _X, _X, itemTexture = GetItemInfo(itemID);
+            local itemID = sorted[blacklistIndex];
+            local itemName, _, itemRarity, _, _, _, _, _, _, itemTexture = GetItemInfo(itemID);
             buttons[i].index = blacklistIndex;
+            buttons[i].itemID = itemID 
             local displayName = "|cffff0000" .. L["UNKNOWN_ITEM"];
             if (itemName and itemRarity) then
                 displayName = ITEM_QUALITY_COLORS[itemRarity].hex .. itemName;
@@ -309,13 +336,26 @@ end
 
 function ExtVendor_QVConfig_LocalWhitelist_Update()
 
+    local sort = {}
+    for _, item in ipairs(EXTVENDOR_DATA[EXTVENDOR_PROFILE]['quickvendor_whitelist']) do
+        if GetItemInfo(item) then
+            sort[GetItemInfo(item)] = item
+        end
+    end
+    table.sort(sort)
+
+    local sorted = {}
+    for _,item in ExtVendor_PairsByKeys(sort) do
+        tinsert(sorted,item)
+    end
+
     local scrollFrame = ExtVendor_QVConfigFrame_LocalWhitelistItemList;
 	local offset = ExtVendor_HybridScrollFrame_GetOffset(scrollFrame);
 	local buttons = scrollFrame.buttons;
 	local numButtons = #buttons;
-    local numBlacklisted = table.maxn(EXTVENDOR_DATA[EXTVENDOR_PROFILE]['quickvendor_whitelist']);
+    local numBlacklisted = table.maxn(sorted);
     local selection = scrollFrame.selection or -1;
-	--local selection = scrollFrame.selection;
+    scrollFrame.itemID = sorted
 
 	local blacklistIndex;
 	local displayedHeight = 0;
@@ -324,8 +364,9 @@ function ExtVendor_QVConfig_LocalWhitelist_Update()
 		if (blacklistIndex > numBlacklisted) then
 			buttons[i]:Hide();
 		else
-            local itemID = EXTVENDOR_DATA[EXTVENDOR_PROFILE]['quickvendor_whitelist'][blacklistIndex];
-            local itemName, itemLink, itemRarity, _X, _X, _X, _X, _X, _X, itemTexture = GetItemInfo(itemID);
+            local itemID = sorted[blacklistIndex];
+            local itemName, _, itemRarity, _, _, _, _, _, _, itemTexture = GetItemInfo(itemID);
+            buttons[i].itemID = itemID
             buttons[i].index = blacklistIndex;
             local displayName = "|cffff0000" .. L["UNKNOWN_ITEM"];
             if (itemName and itemRarity) then
@@ -415,7 +456,7 @@ function ExtVendor_QVConfig_OnItemDrop(button, link)
         infoType, itemID = GetCursorInfo();
     end
     if (infoType ~= "item") then return; end
-    local itemName, retLink, itemRarity, _X, _X, _X, _X, _X, _X, _X, itemSellPrice = GetItemInfo(itemID);
+    local _, retLink, _, _, _, _, _, _, _, _, itemSellPrice = GetItemInfo(itemID);
     ClearCursor();
 
     -- verify the item has a vendor price, otherwise there's no point
@@ -490,8 +531,17 @@ end
 function ExtVendor_QVConfig_DeleteFromBlacklist()
     ExtVendor_QVConfigFrame_RemoveFromBlacklistButton:Disable();
     local sel = ExtVendor_QVConfigFrame_BlacklistItemList.selection or 0;
+    local itemID = ExtVendor_QVConfigFrame_BlacklistItemList.itemID[sel]
+    local tnumber = nil
     if (sel > 0) then
-        table.remove(EXTVENDOR_DATA['quickvendor_blacklist'], sel);
+        for i , v in ipairs(EXTVENDOR_DATA['quickvendor_blacklist']) do
+            if v == itemID then
+                tnumber = i
+            end
+        end
+        if tnumber then
+            table.remove(EXTVENDOR_DATA['quickvendor_blacklist'], tnumber);
+        end
     end
     ExtVendor_QVConfigFrame_BlacklistItemList.selection = -1;
     ExtVendor_QVConfig_Blacklist_Update();
@@ -508,8 +558,17 @@ end
 function ExtVendor_QVConfig_DeleteFromGlobalWhitelist()
     ExtVendor_QVConfigFrame_RemoveFromGlobalWhitelistButton:Disable();
     local sel = ExtVendor_QVConfigFrame_GlobalWhitelistItemList.selection or 0;
+    local itemID = ExtVendor_QVConfigFrame_GlobalWhitelistItemList.itemID[sel]
+    local tnumber = nil
     if (sel > 0) then
-        table.remove(EXTVENDOR_DATA['quickvendor_whitelist'], sel);
+        for i , v in ipairs(EXTVENDOR_DATA['quickvendor_whitelist']) do
+            if v == itemID then
+                tnumber = i
+            end
+        end
+        if tnumber then
+            table.remove(EXTVENDOR_DATA['quickvendor_whitelist'], tnumber);
+        end
     end
     ExtVendor_QVConfigFrame_GlobalWhitelistItemList.selection = -1;
     ExtVendor_QVConfig_GlobalWhitelist_Update();
@@ -526,8 +585,17 @@ end
 function ExtVendor_QVConfig_DeleteFromLocalWhitelist()
     ExtVendor_QVConfigFrame_RemoveFromLocalWhitelistButton:Disable();
     local sel = ExtVendor_QVConfigFrame_LocalWhitelistItemList.selection or 0;
+    local itemID = ExtVendor_QVConfigFrame_LocalWhitelistItemList.itemID[sel]
+    local tnumber = nil
     if (sel > 0) then
-        table.remove(EXTVENDOR_DATA[EXTVENDOR_PROFILE]['quickvendor_whitelist'], sel);
+        for i , v in ipairs(EXTVENDOR_DATA[EXTVENDOR_PROFILE]['quickvendor_whitelist']) do
+            if v == itemID then
+                tnumber = i
+            end
+        end
+        if tnumber then
+            table.remove(EXTVENDOR_DATA[EXTVENDOR_PROFILE]['quickvendor_whitelist'], sel);
+        end
     end
     ExtVendor_QVConfigFrame_LocalWhitelistItemList.selection = -1;
     ExtVendor_QVConfig_LocalWhitelist_Update();

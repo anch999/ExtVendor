@@ -689,7 +689,7 @@ function ExtVendor_UpdateBuybackInfo()
     end
 end
 
-local function pairsByKeys(t)
+function ExtVendor_PairsByKeys(t)
     local a = {}
     for n in pairs(t) do
       table.insert(a, n)
@@ -745,7 +745,7 @@ function ExtVendor_UpdateAltCurrency(currencyTable)
         sorted[GetItemInfo(v[1])] = v
     end
     table.sort(sorted)
-    for _,currency in pairsByKeys(sorted) do
+    for _,currency in ExtVendor_PairsByKeys(sorted) do
         if currency[1] then
             local button = createAtlCurrencys(i)
             if currency[2] and currency[3] == "honor" then
