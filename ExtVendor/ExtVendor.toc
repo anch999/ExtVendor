@@ -2,7 +2,7 @@
 ## Title: Extended Vendor UI Ascension |cffffffffv1.2.6
 ## Notes: Extends the merchant interface for easier browsing.
 ## Author: Ascension Version: Anch - Area-52 (Original Author: Germbread)
-## Version: 1.2.6
+## Version: 1.2.7
 ## SavedVariables: EXTVENDOR_DATA
 ## X-Website: https://discord.gg/nEqQmp9UMf
 
