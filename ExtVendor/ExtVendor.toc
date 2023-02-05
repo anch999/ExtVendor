@@ -1,5 +1,5 @@
 ## Interface: 30300
-## Title: Extended Vendor UI Ascension |cffffffffv1.2.6
+## Title: Extended Vendor UI Ascension |cffffffffv1.2.7
 ## Notes: Extends the merchant interface for easier browsing.
 ## Author: Ascension Version: Anch - Area-52 (Original Author: Germbread)
 ## Version: 1.2.7
