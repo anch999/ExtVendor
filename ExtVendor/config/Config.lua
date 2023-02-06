@@ -8,6 +8,8 @@ local OLD_QUICKVENDOR_ALREADYKNOWN = false;
 local OLD_QUICKVENDOR_WHITEGEAR = false;
 local OLD_MOUSEWHEEL_PAGING = false;
 local OLD_SCALE = 1;
+local OLD_DEFAULT_VENDOR_AUTO_SELL = false;
+
 -- ***********************************************************
 
 local CONFIG_SHOWN = false;
@@ -53,6 +55,8 @@ function ExtVendorConfig_OnLoad(self)
 	ExtVendorConfig_QuickVendorContainer_WhiteGearText:SetText(L["OPTION_QUICKVENDOR_WHITEGEAR"]);
 	ExtVendorConfig_QuickVendorContainer_WhiteGear.tooltip = L["OPTION_QUICKVENDOR_WHITEGEAR_TOOLTIP"];
 
+    ExtVendorConfig_QuickVendorContainer_AutoVendorCheckText:SetText(L["OPTION_DEFAULT_AUTO_CHECK"]);
+	ExtVendorConfig_QuickVendorContainer_AutoVendorCheck.tooltip = L["OPTION_DEFAULT_AUTO_CHECK_TOOLTIP"];
 end
 
 --==================================================
@@ -78,6 +82,7 @@ function ExtVendorConfig_Refresh()
     ExtVendorConfig_QuickVendorContainer_AutoQuickVendor:SetChecked(EXTVENDOR_DATA['config']['enable_quickvendor_auto']);
     ExtVendorConfig_QuickVendorContainer_AlreadyKnown:SetChecked(EXTVENDOR_DATA['config']['quickvendor_alreadyknown']);
     ExtVendorConfig_QuickVendorContainer_WhiteGear:SetChecked(EXTVENDOR_DATA['config']['quickvendor_whitegear']);
+    ExtVendorConfig_QuickVendorContainer_AutoVendorCheck:SetChecked(EXTVENDOR_DATA['config']['hide_default_vendor_auto_sell']);
 end
 
 --==================================================
@@ -92,12 +97,19 @@ function ExtVendorConfig_StoreCurrentSettings()
     OLD_AUTOQUICKVENDOR = EXTVENDOR_DATA['config']['enable_quickvendor_auto'];
     OLD_QUICKVENDOR_ALREADYKNOWN = EXTVENDOR_DATA['config']['quickvendor_alreadyknown'];
     OLD_QUICKVENDOR_WHITEGEAR = EXTVENDOR_DATA['config']['quickvendor_whitegear'];
+    OLD_DEFAULT_VENDOR_AUTO_SELL = EXTVENDOR_DATA['config']['hide_default_vendor_auto_sell'];
+
 end
 
 --========================================
 -- Closing the config window
 --========================================
 function ExtVendorConfig_Close()
+    if EXTVENDOR_DATA['config']['hide_default_vendor_auto_sell'] then
+        MerchantFrameSellJunkFrameAutoSellCheck:Hide()
+    else
+        MerchantFrameSellJunkFrameAutoSellCheck:Show()
+    end
     CONFIG_SHOWN = false;
 end
 
@@ -112,6 +124,7 @@ function ExtVendorConfig_Cancel()
     EXTVENDOR_DATA['config']['enable_quickvendor'] = OLD_QUICKVENDOR_ENABLEBUTTON;
     EXTVENDOR_DATA['config']['quickvendor_alreadyknown'] = OLD_QUICKVENDOR_ALREADYKNOWN;
     EXTVENDOR_DATA['config']['quickvendor_whitegear'] = OLD_QUICKVENDOR_WHITEGEAR;
+    EXTVENDOR_DATA['config']['hide_default_vendor_auto_sell'] = OLD_DEFAULT_VENDOR_AUTO_SELL;
     EXTVENDOR_DATA['config']['mousewheel_paging'] = OLD_MOUSEWHEEL_PAGING;
     ExtVendor_UpdateMouseScrolling();
     ExtVendor_UpdateQuickVendorButtonVisibility();
@@ -165,6 +178,12 @@ function ExtVendorConfig_CheckBox_OnClick(self, id)
 		else
 		    EXTVENDOR_DATA['config']['quickvendor_whitegear'] = false;
 		end
+    elseif (id == 24) then
+        if (self:GetChecked()) then
+            EXTVENDOR_DATA['config']['hide_default_vendor_auto_sell'] = true;
+        else
+            EXTVENDOR_DATA['config']['hide_default_vendor_auto_sell'] = false;
+        end
 	end
 end
 

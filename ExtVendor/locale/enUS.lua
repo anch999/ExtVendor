@@ -131,6 +131,8 @@ L["OPTION_QUICKVENDOR_ALREADYKNOWN"] = "Aready Known items (BoP only)";
 L["OPTION_QUICKVENDOR_ALREADYKNOWN_TOOLTIP"] = "If enabled, items that are |cffff0000Already Known|r (such as profession\nrecipes) will be included in the quick-vendor feature.";
 L["OPTION_QUICKVENDOR_WHITEGEAR"] = "Common quality (|cffffffffWhite|r) weapons and armor";
 L["OPTION_QUICKVENDOR_WHITEGEAR_TOOLTIP"] = "If enabled, all white weapons and armor (not equipped)\nwill be included in the quick-vendor feature.";
+L["OPTION_DEFAULT_AUTO_CHECK"] = "Hide default auto vendor gray checkbox";
+L["OPTION_DEFAULT_AUTO_CHECK_TOOLTIP"] = "Hides the auto vendor grays checkbox added by Ascension.";
 L["NOTE"] = "NOTE";
 L["QUICKVENDOR_SOULBOUND"] = "This option only affects Bind on Pickup (BoP) items.";
 

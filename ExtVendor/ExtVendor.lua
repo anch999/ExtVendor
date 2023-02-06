@@ -111,6 +111,11 @@ end
 -- Hooked merchant frame OnShow
 --========================================
 function ExtVendor_OnShow(self)
+    if EXTVENDOR_DATA['config']['hide_default_vendor_auto_sell'] then
+        MerchantFrameSellJunkFrameAutoSellCheck:Hide()
+    else
+        MerchantFrameSellJunkFrameAutoSellCheck:Show()
+    end
     MerchantFrameSearchBox:SetText("");
  --[[    if (EXTVENDOR_DATA['config']['stockfilter_defall']) then
         SetMerchantFilter(LE_LOOT_FILTER_ALL);
@@ -799,7 +804,7 @@ function ExtVendor_RebuildMerchantFrame()
         ExtVendor_LastPos = MerchantFrame:GetPoint();
         MerchantFrame.isMoving = false;
     end)
-    
+    MerchantRepairSettingsButton:SetPoint("BottomLeft",MerchantFrame,152,111);
     -- create new item buttons as needed
     for i = 1, MERCHANT_ITEMS_PER_PAGE, 1 do
         if (not _G["MerchantItem" .. i]) then

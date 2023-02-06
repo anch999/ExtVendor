@@ -237,6 +237,15 @@
                                             </Anchor>
                                         </Anchors>
                                     </CheckButton>
+                                    <CheckButton id="24" name="$parent_AutoVendorCheck" inherits="ExtVendor_CheckBoxTemplate">
+                                        <Anchors>
+                                            <Anchor point="TOPLEFT">
+                                                <Offset>
+                                                    <AbsDimension x="10" y="-130"/>
+                                                </Offset>
+                                            </Anchor>
+                                        </Anchors>
+                                    </CheckButton>
                                 </Frames>
                             </Frame>
                         </Frames>
