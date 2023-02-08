@@ -436,9 +436,9 @@ function ExtVendor_UpdateMerchantInfo()
 				    merchantMoney:Hide();
 				    merchantAltCurrency:Show();
                     if honorPoints > 0 then
-                        isAltCurrency.honor = {"spell_holy_championsbond", true, "honor"}
+                        isAltCurrency.honor = {"honor", true, "honor"}
                     elseif arenaPoints > 0 then
-                        isAltCurrency.arena = {"spell_holy_championsbond", true, "arena"}
+                        isAltCurrency.arena = {"arena", true, "arena"}
                     elseif _G["MerchantItem" .. i .. "AltCurrencyFrameItem1"].itemLink then 
                         local _, id = strsplit(":", _G["MerchantItem" .. i .. "AltCurrencyFrameItem1"].itemLink)
                         isAltCurrency[id] = {id}
@@ -455,9 +455,9 @@ function ExtVendor_UpdateMerchantInfo()
 				    merchantAltCurrency:Show();
 				    merchantMoney:Show();
                     if honorPoints > 0 then
-                        isAltCurrency.honor = {"spell_holy_championsbond", true, "honor"}
+                        isAltCurrency.honor = {"honor", true, "honor"}
                     elseif arenaPoints > 0 then
-                        isAltCurrency.arena = {"spell_holy_championsbond", true, "arena"}
+                        isAltCurrency.arena = {"arena", true, "arena"}
                     elseif _G["MerchantItem" .. i .. "AltCurrencyFrameItem1"].itemLink then  
                         local _, id = strsplit(":", _G["MerchantItem" .. i .. "AltCurrencyFrameItem1"].itemLink)
                         isAltCurrency[id] = {id}
@@ -742,12 +742,16 @@ local function setTooltip(button)
         GameTooltip:Show()
     end)
 end
-
+local fac = UnitFactionGroup("player")
 function ExtVendor_UpdateAltCurrency(currencyTable)
     local i = 1
     local sorted = {}
-    for _, v in pairs(currencyTable) do
-        sorted[GetItemInfo(v[1])] = v
+    for id, v in pairs(currencyTable) do
+        if id == "honor" or id == "arena" then
+            sorted[id] = v
+        else
+            sorted[GetItemInfo(v[1])] = v
+        end
     end
     table.sort(sorted)
     for _,currency in ExtVendor_PairsByKeys(sorted) do
@@ -755,16 +759,19 @@ function ExtVendor_UpdateAltCurrency(currencyTable)
             local button = createAtlCurrencys(i)
             if currency[2] and currency[3] == "honor" then
                 button.itemID = "Honor Points"
-                button.icon:SetTexture("Interface\\Icons\\"..currency[1]);
+                button.icon:SetTexture("Interface\\TargetingFrame\\UI-PVP-"..fac);
                 button.Lable:SetText("Honor Points: |cffffffff"..GetHonorCurrency())
+                button.icon:SetSize(16,16);
             elseif currency[2] and currency[3] == "arena" then
                 button.itemID = "Arena Points"
-                button.icon:SetTexture("Interface\\Icons\\"..currency[1]);
+                button.icon:SetTexture("Interface\\PVPFrame\\PVP-ArenaPoints-Icon");
                 button.Lable:SetText("Arena Points: |cffffffff"..GetArenaCurrency())
+                button.icon:SetSize(16,16);
             else
                 button.itemID = currency[1]
                 button.icon:SetTexture(GetItemIcon(currency[1]));
                 button.Lable:SetText("|cffffffff"..GetItemCount(currency[1]))
+                button.icon:SetSize(13,13);
             end
             setTooltip(button)
             if i == 1 then
