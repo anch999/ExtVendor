@@ -1,3 +1,5 @@
+local EV = LibStub("AceAddon-3.0"):NewAddon("ExtVendor", "AceTimer-3.0")
+
 EXTVENDOR_VERSION = GetAddOnMetadata("ExtVendor", "Version");
 EXTVENDOR_VERSION_ID = 10502;
 EXTVENDOR_ITEMS_PER_SUBPAGE = MERCHANT_ITEMS_PER_PAGE;  -- transfer original page size to become "sub-pages"
@@ -742,7 +744,17 @@ local function setTooltip(button)
         GameTooltip:Show()
     end)
 end
+
+local function updateCurrency(text, button)
+    if text == "arena" then
+        button.Lable:SetText("Arena Points: |cffffffff"..GetArenaCurrency())
+    else
+        button.Lable:SetText("Honor Points: |cffffffff"..GetHonorCurrency())
+    end
+end
+
 local fac = UnitFactionGroup("player")
+
 function ExtVendor_UpdateAltCurrency(currencyTable)
     local i = 1
     local sorted = {}
@@ -762,11 +774,13 @@ function ExtVendor_UpdateAltCurrency(currencyTable)
                 button.icon:SetTexture("Interface\\TargetingFrame\\UI-PVP-"..fac);
                 button.Lable:SetText("Honor Points: |cffffffff"..GetHonorCurrency())
                 button.icon:SetSize(16,16);
+                EV:ScheduleTimer(updateCurrency, .2, "honor", button)
             elseif currency[2] and currency[3] == "arena" then
                 button.itemID = "Arena Points"
                 button.icon:SetTexture("Interface\\PVPFrame\\PVP-ArenaPoints-Icon");
                 button.Lable:SetText("Arena Points: |cffffffff"..GetArenaCurrency())
                 button.icon:SetSize(16,16);
+                EV:ScheduleTimer(updateCurrency, .2, "arena", button)
             else
                 button.itemID = currency[1]
                 button.icon:SetTexture(GetItemIcon(currency[1]));

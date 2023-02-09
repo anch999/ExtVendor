@@ -6,6 +6,8 @@
 ## SavedVariables: EXTVENDOR_DATA
 ## X-Website: https://discord.gg/nEqQmp9UMf
 
+lib\AceAddon-3.0\AceAddon-3.0.lua
+lib\AceTimer-3.0\AceTimer-3.0.lua
 lib\LibStub.lua
 lib\AceLocale-3.0.lua
 
