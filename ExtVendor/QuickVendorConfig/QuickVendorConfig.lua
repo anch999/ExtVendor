@@ -431,7 +431,7 @@ end
 
 hooksecurefunc("ContainerFrameItemButton_OnModifiedClick", function(self, button)
     if IsAltKeyDown() then
-        if ExtVendor_QVConfigFrame:IsVisible() and  EXTVENDOR_DATA['config']['shift_add_global'] then
+        if ExtVendor_QVConfigFrame:IsVisible() and EXTVENDOR_DATA['config']['shift_add_global'] then
             local link = select(7,GetContainerItemInfo(self:GetParent():GetID(), self:GetID()))
             local type = {}
             type.isWhitelist = true

@@ -1254,7 +1254,33 @@ end
 -- Slash command handler
 --========================================
 function ExtVendor_CommandHandler(cmd)
-    InterfaceOptionsFrame_OpenToCategory(ExtVendorConfigContainer);
+    if cmd == "wlistchar" then
+            local _, link = GameTooltip:GetItem()
+        if GameTooltip:IsShown() and link then
+            local type = {}
+            type.isWhitelist = true
+            type.isLocal = true
+            ExtVendor_QVConfig_OnItemDrop(type, link)
+        end
+    elseif cmd == "wlist" then
+            local _, link = GameTooltip:GetItem()
+        if GameTooltip:IsShown() and link then
+            local type = {}
+            type.isWhitelist = true
+            type.isLocal = false
+            ExtVendor_QVConfig_OnItemDrop(type, link)
+        end
+    elseif cmd == "blist" then
+            local _, link = GameTooltip:GetItem()
+        if GameTooltip:IsShown() and link then
+            local type = {}
+            type.isWhitelist = false
+            type.isLocal = false
+            ExtVendor_QVConfig_OnItemDrop(type, link)
+        end
+    else
+        InterfaceOptionsFrame_OpenToCategory(ExtVendorConfigContainer);
+    end
 end
 
 --========================================
