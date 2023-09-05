@@ -813,6 +813,7 @@ function ExtVendor_RebuildMerchantFrame()
     if ExtVendor_LastPos then
     MerchantFrame:SetPoint(ExtVendor_LastPos);
     end
+
     MerchantFrame:SetWidth(736);
     MerchantFrame:RegisterForDrag("LeftButton");
     MerchantFrame:SetScript("OnDragStart", function ()

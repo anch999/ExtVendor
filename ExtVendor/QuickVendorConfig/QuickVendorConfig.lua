@@ -594,7 +594,7 @@ function ExtVendor_QVConfig_DeleteFromLocalWhitelist()
             end
         end
         if tnumber then
-            table.remove(EXTVENDOR_DATA[EXTVENDOR_PROFILE]['quickvendor_whitelist'], sel);
+            table.remove(EXTVENDOR_DATA[EXTVENDOR_PROFILE]['quickvendor_whitelist'], tnumber);
         end
     end
     ExtVendor_QVConfigFrame_LocalWhitelistItemList.selection = -1;
