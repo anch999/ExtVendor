@@ -1,4 +1,4 @@
-local EV = LibStub("AceAddon-3.0"):NewAddon("ExtVendor", "AceTimer-3.0")
+local EV = LibStub("AceAddon-3.0"):NewAddon("ExtVendor", "AceTimer-3.0", "AceEvent-3.0")
 
 EXTVENDOR_VERSION = GetAddOnMetadata("ExtVendor", "Version");
 EXTVENDOR_VERSION_ID = 10502;
@@ -131,7 +131,7 @@ end
 -- Hooked merchant frame OnHide
 --========================================
 function ExtVendor_OnHide(self)
-
+    ExtVendorMerchantFrame:Hide()
     CloseDropDownMenus();
 
 end
@@ -235,6 +235,7 @@ function ExtVendor_UpdateButtonPositions(isBuyBack)
     end
     for i = 1, MERCHANT_ITEMS_PER_PAGE, 1 do
         btn = _G["MerchantItem" .. i];
+        btn:SetParent(ExtVendorMerchantFrame)
         if (isBuyBack) then
             if (i > BUYBACK_ITEMS_PER_PAGE) then
                 btn:Hide();
@@ -803,19 +804,75 @@ function ExtVendor_UpdateAltCurrency(currencyTable)
         end
     end
 end
+
 --========================================
 -- Rebuilds the merchant frame into
 -- the extended design
 --========================================
 function ExtVendor_RebuildMerchantFrame()
 
+local mainframe = CreateFrame("FRAME", "ExtVendorMerchantFrame", UIParent, "PortraitFrameTemplate")
+    mainframe:SetPoint("CENTER",0,0)
+    mainframe:EnableMouse(true)
+    mainframe:SetMovable(1)
+    mainframe:SetFrameStrata("HIGH")
+    mainframe.TitleText:SetText(" ")
+    mainframe:RegisterForDrag("LeftButton")
+    mainframe:SetMovable(true)
+    mainframe:EnableKeyboard(true)
+    mainframe:Hide()
+    mainframe:SetSize(736,512)
+    mainframe:SetScript("OnShow", function(self)
+        SetPortraitTexture(self.portrait, "NPC")
+    end)
+
+    mainframe:SetScript("OnHide", function()
+
+    end)
+    mainframe:SetScript("OnDragStart", function(self)
+        self:StartMoving()
+        self.isMoving = true
+    end)
+    mainframe:SetScript("OnDragStop", function(self)
+        self:StopMovingOrSizing()
+        self.isMoving = false
+     end)
+
     -- set the new width of the frame
     if ExtVendor_LastPos then
-    MerchantFrame:SetPoint(ExtVendor_LastPos);
+    --MerchantFrame:SetPoint(ExtVendor_LastPos);
     end
 
-    MerchantFrame:SetWidth(736);
-    MerchantFrame:RegisterForDrag("LeftButton");
+    function MerchantFrame_OnEvent(self, event, ...)
+        print("test")
+        if ( event == "MERCHANT_UPDATE" ) then
+            if ( _G["ExtVendorMerchantFrame"]:IsVisible() ) then
+                MerchantFrame_Update();
+            end
+        elseif ( event == "MERCHANT_CLOSED" ) then
+            HideUIPanel(self);
+            _G["ExtVendorMerchantFrame"]:Hide()
+        elseif ( event == "MERCHANT_SHOW" ) then
+            --ShowUIPanel(self);
+            _G["ExtVendorMerchantFrame"]:Show()
+            if ( not self:IsShown() ) then
+                CloseMerchant();
+                return;
+            end
+            self.page = 1;
+            MerchantFrame_Update();
+        elseif ( event == "PLAYER_MONEY" or event == "GUILDBANK_UPDATE_MONEY" or event == "GUILDBANK_UPDATE_WITHDRAWMONEY" ) then
+            MerchantFrame_UpdateCanRepairAll();
+            MerchantFrame_UpdateRepairButtons();
+        end
+    end
+    --MerchantFrame:EnableMouse(false)
+    --MerchantFrame:SetWidth(736);
+    --MerchantFrame:SetParent("ExtVendorMerchantFrame")
+    --MerchantFrame:ClearAllPoints()
+    --MerchantFrame:SetPoint("CENTER","ExtVendorMerchantFrame")
+
+--[[     MerchantFrame:RegisterForDrag("LeftButton");
     MerchantFrame:SetScript("OnDragStart", function ()
         MerchantFrame:StartMoving();
         MerchantFrame.isMoving = true;
@@ -825,7 +882,7 @@ function ExtVendor_RebuildMerchantFrame()
         MerchantFrame:StopMovingOrSizing();
         ExtVendor_LastPos = MerchantFrame:GetPoint();
         MerchantFrame.isMoving = false;
-    end)
+    end) ]]
     MerchantRepairSettingsButton:SetPoint("BottomLeft",MerchantFrame,152,111);
     -- create new item buttons as needed
     for i = 1, MERCHANT_ITEMS_PER_PAGE, 1 do
@@ -837,10 +894,10 @@ function ExtVendor_RebuildMerchantFrame()
     -- Thank you Blizzard for making the frame dynamically resizable for me. :D
 
     -- retexture the border element around the repair/buyback spots on the merchant tab
-    MerchantFrameBottomLeftBorder:SetTexture("Interface\\AddOns\\ExtVendor\\textures\\bottomborder");
-    MerchantFrameBottomRightBorder:SetTexture("Interface\\AddOns\\ExtVendor\\textures\\bottomborder");
+--[[     MerchantFrameBottomLeftBorder:SetTexture("Interface\\AddOns\\ExtVendor\\textures\\bottomborder");
+    MerchantFrameBottomRightBorder:SetTexture("Interface\\AddOns\\ExtVendor\\textures\\bottomborder"); ]]
 
-    local topmiddleleft = MerchantFrame:CreateTexture("ExtFrameTop", "BACKGROUND");
+--[[     local topmiddleleft = MerchantFrame:CreateTexture("ExtFrameTop", "BACKGROUND");
     topmiddleleft:SetPoint("TOP", MerchantFrame,85, 0);
     topmiddleleft:SetTexture("Interface\\AddOns\\ExtVendor\\textures\\UI-Merchant-TopRight","MIRROR","MIRROR");
     topmiddleleft:SetHorizTile(true);
@@ -850,7 +907,7 @@ function ExtVendor_RebuildMerchantFrame()
     botmiddleleft:SetPoint("BOTTOM", MerchantFrame, 100, 0);
     botmiddleleft:SetTexture("Interface\\AddOns\\ExtVendor\\textures\\UI-MERCHANT-BOTRIGHT","MIRROR","MIRROR");
     botmiddleleft:SetHorizTile(true);
-    botmiddleleft:SetWidth(450);
+    botmiddleleft:SetWidth(450); ]]
 
     -- alter the position of the buyback item slot on the merchant tab
     MerchantBuyBackItem:ClearAllPoints();

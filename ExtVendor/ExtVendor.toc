@@ -10,6 +10,7 @@ lib\AceAddon-3.0\AceAddon-3.0.lua
 lib\AceTimer-3.0\AceTimer-3.0.lua
 lib\LibStub.lua
 lib\AceLocale-3.0.lua
+Lib\AceEvent-3.0\AceEvent-3.0.xml
 
 embeds.xml
 
