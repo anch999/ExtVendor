@@ -67,6 +67,7 @@ L["STAT_STRENGTH"] = "Strength";
 L["STAT_AGILITY"] = "Agility";
 L["STAT_INTELLECT"] = "Intellect";
 L["STAT_SPIRIT"] = "Spirit";
+L["STAT_STAMINA"] = "Stamina";
 
 L["STAT_ATTACT_POWER"] = "Attack Power";
 L["STAT_SPELL_POWER"] = "Spell Power";

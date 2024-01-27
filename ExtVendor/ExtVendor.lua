@@ -55,11 +55,12 @@ local SLOT_FILTERS = {
 };
 
 local STAT_FILTERS = {
-    [1] = {"ITEM_MOD_STRENGTH_SHORT", "ITEM_MOD_STRENGTH_SHORT", "ITEM_MOD_AGILITY_SHORT", "ITEM_MOD_INTELLECT_SHORT", "ITEM_MOD_SPIRIT_SHORT"},
+    [1] = {"ITEM_MOD_STRENGTH_SHORT", "ITEM_MOD_STRENGTH_SHORT", "ITEM_MOD_AGILITY_SHORT", "ITEM_MOD_INTELLECT_SHORT", "ITEM_MOD_SPIRIT_SHORT", "ITEM_MOD_STAMINA_SHORT"},
     [2] = {"ITEM_MOD_STRENGTH_SHORT"},
     [3] = {"ITEM_MOD_AGILITY_SHORT"},
     [4] = {"ITEM_MOD_INTELLECT_SHORT"},
     [5] = {"ITEM_MOD_SPIRIT_SHORT"},
+    [6] = {"ITEM_MOD_STAMINA_SHORT"},
 
     [6] = {"ITEM_MOD_ATTACK_POWER_SHORT", "ITEM_MOD_SPELL_POWER_SHORT", "ITEM_MOD_CRIT_RATING_SHORT", "ITEM_MOD_HIT_RATING_SHORT", "ITEM_MOD_HASTE_RATING_SHORT", "ITEM_MOD_EXPERTISE_RATING_SHORT", "ITEM_MOD_ARMOR_PENETRATION_RATING_SHORT", "ITEM_MOD_SPELL_PENETRATION_SHORT"},
     [7] = {"ITEM_MOD_ATTACK_POWER_SHORT"},
@@ -1117,6 +1118,8 @@ function ExtVendor_DisplayFilterDropDown(self)
                         { text = L["STAT_AGILITY"],       checked = (STAT_FILTER_INDEX == 3), func = function() ExtVendor_SetSlotFilter(3, true); end },
                         { text = L["STAT_INTELLECT"],      checked = (STAT_FILTER_INDEX == 4), func = function() ExtVendor_SetSlotFilter(4, true); end },
                         { text = L["STAT_SPIRIT"],      checked = (STAT_FILTER_INDEX == 5), func = function() ExtVendor_SetSlotFilter(5, true); end },
+                        { text = L["STAT_STAMINA"],      checked = (STAT_FILTER_INDEX == 6), func = function() ExtVendor_SetSlotFilter(6, true); end },
+
                     },
                 },
                 { text = L["STAT_SECONDARY"], hasArrow = true, notCheckable = true,
