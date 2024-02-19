@@ -23,6 +23,7 @@ L["FILTER_ALREADY_KNOWN"] = "Hide Already Known";
 L["FILTER_PURCHASED"] = "Hide Already Purchased";
 L["FILTER_SLOT"] = "Slot";
 L["FILTER_STAT"] = "Stats";
+L["FILTER_ARMOR"] = "Armor";
 L["QUALITY_FILTER_MINIMUM"] = "Quality (Minimum)";
 L["QUALITY_FILTER_SPECIFIC"] = "Quality (Specific)";
 L["SINGLE_ITEM_HIDDEN"] = "%d item hidden";

@@ -17,13 +17,6 @@ local EXTVENDOR_NUM_PAGES = 1;
 local SLOT_FILTER_INDEX = 0;
 local STAT_FILTER_INDEX = 0;
 
-EXTVENDOR_ARMOR_RANKS = {
-    [L["ARMOR_CLOTH"]] = 1,
-    [L["ARMOR_LEATHER"]] = 2,
-    [L["ARMOR_MAIL"]] = 3,
-    [L["ARMOR_PLATE"]] = 4,
-};
-
 local SLOT_FILTERS = {
     [1] = {"INVTYPE_HEAD", "INVTYPE_SHOULDER", "INVTYPE_CLOAK", "INVTYPE_CHEST", "INVTYPE_ROBE", "INVTYPE_WRIST", "INVTYPE_HAND", "INVTYPE_WAIST", "INVTYPE_LEGS", "INVTYPE_FEET"},
     [2] = {"INVTYPE_HEAD"},
@@ -85,22 +78,22 @@ local STAT_FILTERS = {
 --========================================
 function ExtVendor_OnLoad(self)
 
-    ExtVendor_RebuildMerchantFrame();
+    ExtVendor_RebuildMerchantFrame()
 
-    ExtVendor_UpdateButtonPositions();
+    ExtVendor_UpdateButtonPositions()
 
-    EXTVENDOR_HOOKS["MerchantFrame_UpdateMerchantInfo"] = MerchantFrame_UpdateMerchantInfo;
-    MerchantFrame_UpdateMerchantInfo = ExtVendor_UpdateMerchantInfo;
-    EXTVENDOR_HOOKS["MerchantFrame_UpdateBuybackInfo"] = MerchantFrame_UpdateBuybackInfo;
-    MerchantFrame_UpdateBuybackInfo = ExtVendor_UpdateBuybackInfo;
+    EXTVENDOR_HOOKS["MerchantFrame_UpdateMerchantInfo"] = MerchantFrame_UpdateMerchantInfo
+    MerchantFrame_UpdateMerchantInfo = ExtVendor_UpdateMerchantInfo
+    EXTVENDOR_HOOKS["MerchantFrame_UpdateBuybackInfo"] = MerchantFrame_UpdateBuybackInfo
+    MerchantFrame_UpdateBuybackInfo = ExtVendor_UpdateBuybackInfo
 
-    MerchantFrame:HookScript("OnShow", ExtVendor_OnShow);
-    MerchantFrame:HookScript("OnHide", ExtVendor_OnHide);
+    MerchantFrame:HookScript("OnShow", ExtVendor_OnShow)
+    MerchantFrame:HookScript("OnHide", ExtVendor_OnHide)
 
-    self:RegisterEvent("ADDON_LOADED");
+    self:RegisterEvent("ADDON_LOADED")
 
-    SLASH_EXTVENDOR1 = "/evui";
-    SlashCmdList["EXTVENDOR"] = ExtVendor_CommandHandler;
+    SLASH_EXTVENDOR1 = "/evui"
+    SlashCmdList["EXTVENDOR"] = ExtVendor_CommandHandler
 
 end
 
@@ -119,13 +112,21 @@ function ExtVendor_OnShow(self)
     else
         MerchantFrameSellJunkFrameAutoSellCheck:Show()
     end
-    MerchantFrameSearchBox:SetText("");
- --[[    if (EXTVENDOR_DATA['config']['stockfilter_defall']) then
-        SetMerchantFilter(LE_LOOT_FILTER_ALL);
-    end ]]
-    ExtVendor_SetMinimumQuality(0);
-    ExtVendor_SetSlotFilter(0);
-    ExtVendor_AutoSell_Junk();
+    if not EXTVENDOR_DATA['config']['armor_filter'] then
+        EXTVENDOR_DATA['config']['armor_filter'] = {
+            All = true,
+            Cloth = false,
+            Leather = false,
+            Mail = false,
+            Plate = false
+        }
+    end
+
+    MerchantFrameSearchBox:SetText("")
+
+    ExtVendor_SetMinimumQuality(0)
+    ExtVendor_SetSlotFilter(0)
+    ExtVendor_AutoSell_Junk()
 end
 
 --========================================
@@ -145,7 +146,7 @@ function ExtVendor_OnEvent(self, event, ...)
     if (event == "ADDON_LOADED") then
         local arg1 = ...;
         if (arg1 == "ExtVendor") then
-            ExtVendor_Setup();
+            ExtVendor_Setup()
         end
     end
 
@@ -287,7 +288,7 @@ function ExtVendor_UpdateMerchantInfo()
     local indexes = {};
     local search = string.trim(MerchantFrameSearchBox:GetText());
 	local name, texture, price, quantity, numAvailable, isUsable, extendedCost, r, g, b, notOptimal;
-    local link, quality, itemType, itemId, itemEquipLoc;
+    local link, quality, itemType, itemSubType, itemId, itemEquipLoc;
     local isFiltered = false;
     local isBoP = false;
     local isKnown = false;
@@ -313,7 +314,7 @@ function ExtVendor_UpdateMerchantInfo()
                     isBoP, isKnown = ExtVendor_GetExtendedItemInfo(link);
                     itemId = ExtVendor_GetItemID(link);
                     isCollectionItemKnow = C_VanityCollection.IsCollectionItemOwned(itemId);
-                    _, _, quality, _, _, itemType, _, _, itemEquipLoc, _, _ = GetItemInfo(link);
+                    _, _, quality, _, _, itemType, itemSubType, _, itemEquipLoc, _, _ = GetItemInfo(link);
                 end
                 -- filter known recipes
                 if (EXTVENDOR_DATA['config']['hide_known_recipes'] and isKnown) then
@@ -343,7 +344,14 @@ function ExtVendor_UpdateMerchantInfo()
                         isFiltered = true;
                     end
                 end
-
+                -- check armor filter
+                if EXTVENDOR_DATA['config']['armor_filter'] and not EXTVENDOR_DATA['config']['armor_filter']["All"] and itemType == "Armor" then
+                    for i, v in pairs(EXTVENDOR_DATA['config']['armor_filter']) do
+                        if i == itemSubType and not v then
+                            isFiltered = true
+                        end
+                    end   
+                end
                 -- check slot filter
                 if (SLOT_FILTER_INDEX > 0) then
                     if (SLOT_FILTERS[SLOT_FILTER_INDEX]) then
@@ -521,6 +529,14 @@ function ExtVendor_UpdateMerchantInfo()
                                 isFiltered = true;
                             end
                         end
+                    end
+                    -- check armor filter
+                    if EXTVENDOR_DATA['config']['armor_filter'] and not EXTVENDOR_DATA['config']['armor_filter']["All"] and itemType == "Armor" then
+                        for i, v in pairs(EXTVENDOR_DATA['config']['armor_filter']) do
+                            if i == itemSubType and not v then
+                                isFiltered = true
+                            end
+                        end   
                     end
                     -- check slot filter
                     if (SLOT_FILTER_INDEX > 0) then
@@ -1108,6 +1124,15 @@ function ExtVendor_DisplayFilterDropDown(self)
                 { text = L["FILTER_PURCHASED"], checked = EXTVENDOR_DATA['config']['filter_purchased_recipes'], func = function() ExtVendor_ToggleSetting("filter_purchased_recipes"); ExtVendor_UpdateDisplay(); end },
             },
         },
+        { text = L["FILTER_ARMOR"], hasArrow = true, notCheckable = true,
+                menuList = {
+                    { text = ALL, checked = (EXTVENDOR_DATA['config']['armor_filter']["All"]), func = function() ExtVendor_SetArmorFilter("All") end },
+                    { text = L["ARMOR_CLOTH"], checked = (EXTVENDOR_DATA['config']['armor_filter']["Cloth"]), func = function() ExtVendor_SetArmorFilter("Cloth") end },
+                    { text = L["ARMOR_LEATHER"], checked = (EXTVENDOR_DATA['config']['armor_filter']["Leather"]), func = function() ExtVendor_SetArmorFilter("Leather") end },
+                    { text = L["ARMOR_MAIL"], checked = (EXTVENDOR_DATA['config']['armor_filter']["Mail"]), func = function() ExtVendor_SetArmorFilter("Mail") end },
+                    { text = L["ARMOR_PLATE"], checked = (EXTVENDOR_DATA['config']['armor_filter']["Plate"]), func = function() ExtVendor_SetArmorFilter("Plate") end },      
+                },
+        },
         { text = L["FILTER_STAT"], hasArrow = true, notCheckable = true,
             menuList = {
                 { text = ALL,                   checked = (STAT_FILTER_INDEX == 0),  func = function() ExtVendor_SetSlotFilter(0, true); end },
@@ -1321,6 +1346,23 @@ function ExtVendor_UpdateMouseScrolling(state)
     else
         MerchantFrame:SetScript("OnMouseWheel", nil);
     end
+end
+
+--========================================
+-- Changes the armor filter
+--========================================
+function ExtVendor_SetArmorFilter(type)
+    if type == "All" then
+        for i, v in pairs(EXTVENDOR_DATA['config']['armor_filter']) do
+            EXTVENDOR_DATA["config"]["armor_filter"][i] = false
+        end
+        EXTVENDOR_DATA["config"]["armor_filter"]["All"] = true
+    else
+        EXTVENDOR_DATA['config']['armor_filter'][type] = not EXTVENDOR_DATA['config']['armor_filter'][type]
+        EXTVENDOR_DATA["config"]["armor_filter"]["All"] = false
+    end
+   
+    ExtVendor_UpdateDisplay()
 end
 
 --========================================
