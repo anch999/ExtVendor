@@ -241,8 +241,9 @@ function ExtVendor_QVConfig_Blacklist_Update()
 
     local sort = {}
     for _, item in ipairs(EXTVENDOR_DATA['quickvendor_blacklist']) do
-        if GetItemInfo(item) then
-            sort[GetItemInfo(item)] = item
+        local itemInfo = GetItemInfoInstant(item)
+        if itemInfo then
+            sort[itemInfo.name] = item
         end
     end
     table.sort(sort)
@@ -268,13 +269,13 @@ function ExtVendor_QVConfig_Blacklist_Update()
 			buttons[i]:Hide();
 		else
             local itemID = sorted[blacklistIndex];
-            local itemName, _, itemRarity, _, _, _, _, _, _, itemTexture = GetItemInfo(itemID);
+            local itemInfo = GetItemInfoInstant(itemID)
             buttons[i].index = blacklistIndex;
             local displayName = "|cffff0000" .. L["UNKNOWN_ITEM"];
-            if (itemName and itemRarity) then
-                displayName = ITEM_QUALITY_COLORS[itemRarity].hex .. itemName;
+            if (itemInfo.name and itemInfo.quality) then
+                displayName = ITEM_QUALITY_COLORS[itemInfo.quality].hex .. itemInfo.name;
             end
-            ExtVendor_ItemListButton_DisplayItem(buttons[i], itemID, itemTexture, displayName, selection);
+            ExtVendor_ItemListButton_DisplayItem(buttons[i], itemID, itemInfo.icon, displayName, selection);
 			displayedHeight = displayedHeight + buttons[i]:GetHeight();
 		end
 	end
@@ -289,8 +290,9 @@ function ExtVendor_QVConfig_GlobalWhitelist_Update()
 
     local sort = {}
     for _, item in ipairs(EXTVENDOR_DATA['quickvendor_whitelist']) do
-        if GetItemInfo(item) then
-            sort[GetItemInfo(item)] = item
+        local itemInfo = GetItemInfoInstant(item)
+        if itemInfo then
+            sort[itemInfo.name] = item
         end
     end
     table.sort(sort)
@@ -316,14 +318,14 @@ function ExtVendor_QVConfig_GlobalWhitelist_Update()
 			buttons[i]:Hide();
 		else
             local itemID = sorted[blacklistIndex];
-            local itemName, _, itemRarity, _, _, _, _, _, _, itemTexture = GetItemInfo(itemID);
+            local itemInfo = GetItemInfoInstant(itemID)
             buttons[i].index = blacklistIndex;
             buttons[i].itemID = itemID 
             local displayName = "|cffff0000" .. L["UNKNOWN_ITEM"];
-            if (itemName and itemRarity) then
-                displayName = ITEM_QUALITY_COLORS[itemRarity].hex .. itemName;
+            if (itemInfo.name and itemInfo.quality) then
+                displayName = ITEM_QUALITY_COLORS[itemInfo.quality].hex .. itemInfo.name;
             end
-            ExtVendor_ItemListButton_DisplayItem(buttons[i], itemID, itemTexture, displayName, selection);
+            ExtVendor_ItemListButton_DisplayItem(buttons[i], itemID, itemInfo.icon, displayName, selection);
 			displayedHeight = displayedHeight + buttons[i]:GetHeight();
 		end
 	end
@@ -338,8 +340,9 @@ function ExtVendor_QVConfig_LocalWhitelist_Update()
 
     local sort = {}
     for _, item in ipairs(EXTVENDOR_DATA[EXTVENDOR_PROFILE]['quickvendor_whitelist']) do
-        if GetItemInfo(item) then
-            sort[GetItemInfo(item)] = item
+        local itemInfo = GetItemInfoInstant(item)
+        if itemInfo then
+            sort[itemInfo.name] = item
         end
     end
     table.sort(sort)
@@ -365,14 +368,14 @@ function ExtVendor_QVConfig_LocalWhitelist_Update()
 			buttons[i]:Hide();
 		else
             local itemID = sorted[blacklistIndex];
-            local itemName, _, itemRarity, _, _, _, _, _, _, itemTexture = GetItemInfo(itemID);
+            local itemInfo = GetItemInfoInstant(itemID)
             buttons[i].itemID = itemID
             buttons[i].index = blacklistIndex;
             local displayName = "|cffff0000" .. L["UNKNOWN_ITEM"];
-            if (itemName and itemRarity) then
-                displayName = ITEM_QUALITY_COLORS[itemRarity].hex .. itemName;
+            if (itemInfo.name and itemInfo.quality) then
+                displayName = ITEM_QUALITY_COLORS[itemInfo.quality].hex .. itemInfo.name;
             end
-            ExtVendor_ItemListButton_DisplayItem(buttons[i], itemID, itemTexture, displayName, selection);
+            ExtVendor_ItemListButton_DisplayItem(buttons[i], itemID, itemInfo.icon, displayName, selection);
 			displayedHeight = displayedHeight + buttons[i]:GetHeight();
 		end
 	end

@@ -136,6 +136,11 @@ function ExtVendor_ConfirmQuickVendor()
 
                     if ((price or 0) > 0) then
                         if (ExtVendor_IsItemQuickVendor(link, quality, isBoP, isKnown, itemType, itemSubType, itemEquipLoc)) then
+                            local itemID = GetItemInfoFromHyperlink(link)
+                            local appearanceID = C_Appearance.GetItemAppearanceID(itemID)
+                            if appearanceID and not C_AppearanceCollection.IsAppearanceCollected(appearanceID) then
+                                C_AppearanceCollection.CollectItemAppearance(itemID)
+                            end
                             PickupContainerItem(bag, slot);
                             PickupMerchantItem(0);
                             color = select(4,GetItemQualityColor(quality));
