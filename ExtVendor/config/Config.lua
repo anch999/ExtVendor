@@ -5,6 +5,7 @@ local OLD_LOADMESSAGE = false;
 local OLD_QUICKVENDOR_ENABLEBUTTON = false;
 local OLD_AUTOQUICKVENDOR = false;
 local OLD_QUICKVENDOR_ALREADYKNOWN = false;
+local OLD_QUICKVENDOR_ALREADYKNOWNBOERECIPES = false;
 local OLD_QUICKVENDOR_WHITEGEAR = false;
 local OLD_MOUSEWHEEL_PAGING = false;
 local OLD_SCALE = 1;
@@ -52,6 +53,9 @@ function ExtVendorConfig_OnLoad(self)
 	ExtVendorConfig_QuickVendorContainer_AlreadyKnownText:SetText(L["OPTION_QUICKVENDOR_ALREADYKNOWN"]);
 	ExtVendorConfig_QuickVendorContainer_AlreadyKnown.tooltip = L["OPTION_QUICKVENDOR_ALREADYKNOWN_TOOLTIP"] .. "\n\n|cff00ff00" .. L["QUICKVENDOR_SOULBOUND"];
 
+    ExtVendorConfig_QuickVendorContainer_AlreadyKnownBoeRecipeText:SetText(L["OPTION_QUICKVENDOR_ALREADYKNOWNBOERECIPE"]);
+	ExtVendorConfig_QuickVendorContainer_AlreadyKnownBoeRecipe.tooltip = L["OPTION_QUICKVENDOR_ALREADYKNOWNBOERECIPE_TOOLTIP"] .. "\n\n|cff00ff00" .. L["QUICKVENDOR_SOULBOUND"];
+
 	ExtVendorConfig_QuickVendorContainer_WhiteGearText:SetText(L["OPTION_QUICKVENDOR_WHITEGEAR"]);
 	ExtVendorConfig_QuickVendorContainer_WhiteGear.tooltip = L["OPTION_QUICKVENDOR_WHITEGEAR_TOOLTIP"];
 
@@ -81,6 +85,7 @@ function ExtVendorConfig_Refresh()
     ExtVendorConfig_QuickVendorContainer_EnableButton:SetChecked(EXTVENDOR_DATA['config']['enable_quickvendor']);
     ExtVendorConfig_QuickVendorContainer_AutoQuickVendor:SetChecked(EXTVENDOR_DATA['config']['enable_quickvendor_auto']);
     ExtVendorConfig_QuickVendorContainer_AlreadyKnown:SetChecked(EXTVENDOR_DATA['config']['quickvendor_alreadyknown']);
+    ExtVendorConfig_QuickVendorContainer_AlreadyKnownBoeRecipe:SetChecked(EXTVENDOR_DATA['config']['quickvendor_alreadyknownBoeRecipes']);
     ExtVendorConfig_QuickVendorContainer_WhiteGear:SetChecked(EXTVENDOR_DATA['config']['quickvendor_whitegear']);
     ExtVendorConfig_QuickVendorContainer_AutoVendorCheck:SetChecked(EXTVENDOR_DATA['config']['hide_default_vendor_auto_sell']);
 end
@@ -96,6 +101,7 @@ function ExtVendorConfig_StoreCurrentSettings()
     OLD_QUICKVENDOR_ENABLEBUTTON = EXTVENDOR_DATA['config']['enable_quickvendor'];
     OLD_AUTOQUICKVENDOR = EXTVENDOR_DATA['config']['enable_quickvendor_auto'];
     OLD_QUICKVENDOR_ALREADYKNOWN = EXTVENDOR_DATA['config']['quickvendor_alreadyknown'];
+    OLD_QUICKVENDOR_ALREADYKNOWNBOERECIPES = EXTVENDOR_DATA['config']['quickvendor_alreadyknownBoeRecipes'];
     OLD_QUICKVENDOR_WHITEGEAR = EXTVENDOR_DATA['config']['quickvendor_whitegear'];
     OLD_DEFAULT_VENDOR_AUTO_SELL = EXTVENDOR_DATA['config']['hide_default_vendor_auto_sell'];
 
@@ -123,6 +129,7 @@ function ExtVendorConfig_Cancel()
     EXTVENDOR_DATA['config']['enable_quickvendor_auto'] = OLD_AUTOQUICKVENDOR;
     EXTVENDOR_DATA['config']['enable_quickvendor'] = OLD_QUICKVENDOR_ENABLEBUTTON;
     EXTVENDOR_DATA['config']['quickvendor_alreadyknown'] = OLD_QUICKVENDOR_ALREADYKNOWN;
+    EXTVENDOR_DATA['config']['quickvendor_alreadyknownBoeRecipes'] = OLD_QUICKVENDOR_ALREADYKNOWNBOERECIPES;
     EXTVENDOR_DATA['config']['quickvendor_whitegear'] = OLD_QUICKVENDOR_WHITEGEAR;
     EXTVENDOR_DATA['config']['hide_default_vendor_auto_sell'] = OLD_DEFAULT_VENDOR_AUTO_SELL;
     EXTVENDOR_DATA['config']['mousewheel_paging'] = OLD_MOUSEWHEEL_PAGING;
@@ -174,11 +181,17 @@ function ExtVendorConfig_CheckBox_OnClick(self, id)
 		end
     elseif (id == 23) then
 		if (self:GetChecked()) then
+		    EXTVENDOR_DATA['config']['quickvendor_alreadyknownBoeRecipes'] = true;
+		else
+		    EXTVENDOR_DATA['config']['quickvendor_alreadyknownBoeRecipes'] = false;
+		end
+    elseif (id == 24) then
+		if (self:GetChecked()) then
 		    EXTVENDOR_DATA['config']['quickvendor_whitegear'] = true;
 		else
 		    EXTVENDOR_DATA['config']['quickvendor_whitegear'] = false;
 		end
-    elseif (id == 24) then
+    elseif (id == 25) then
         if (self:GetChecked()) then
             EXTVENDOR_DATA['config']['hide_default_vendor_auto_sell'] = true;
         else

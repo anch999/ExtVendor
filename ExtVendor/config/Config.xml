@@ -197,7 +197,7 @@
                                         <Offset x="0" y="-20"/>
                                     </Anchor>
                                     <Anchor point="BOTTOMRIGHT" relativeTo="$parent_GeneralContainer" relativePoint="BOTTOMRIGHT">
-                                        <Offset x="0" y="-190"/>
+                                        <Offset x="0" y="-220"/>
                                     </Anchor>
                                 </Anchors>
                                 <Frames>
@@ -228,7 +228,7 @@
                                             </Anchor>
                                         </Anchors>
                                     </CheckButton>
-                                    <CheckButton id="23" name="$parent_WhiteGear" inherits="ExtVendor_CheckBoxTemplate">
+                                    <CheckButton id="23" name="$parent_AlreadyKnownBoeRecipe" inherits="ExtVendor_CheckBoxTemplate">
                                         <Anchors>
                                             <Anchor point="TOPLEFT">
                                                 <Offset>
@@ -237,11 +237,20 @@
                                             </Anchor>
                                         </Anchors>
                                     </CheckButton>
-                                    <CheckButton id="24" name="$parent_AutoVendorCheck" inherits="ExtVendor_CheckBoxTemplate">
+                                    <CheckButton id="24" name="$parent_WhiteGear" inherits="ExtVendor_CheckBoxTemplate">
                                         <Anchors>
                                             <Anchor point="TOPLEFT">
                                                 <Offset>
                                                     <AbsDimension x="10" y="-130"/>
+                                                </Offset>
+                                            </Anchor>
+                                        </Anchors>
+                                    </CheckButton>
+                                    <CheckButton id="25" name="$parent_AutoVendorCheck" inherits="ExtVendor_CheckBoxTemplate">
+                                        <Anchors>
+                                            <Anchor point="TOPLEFT">
+                                                <Offset>
+                                                    <AbsDimension x="10" y="-160"/>
                                                 </Offset>
                                             </Anchor>
                                         </Anchors>

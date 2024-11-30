@@ -64,7 +64,7 @@ end
 -- if it is already known, soulbound
 --========================================
 function ExtVendor_IsItemQuickVendor(link, quality, isSoulbound, alreadyKnown, type, subType, equipSlot)
-    local itemID = ExtVendor_GetItemID(link);
+    local itemID = GetItemInfoFromHyperlink(link);
     -- don't vendor blacklisted items
     if (ExtVendor_IsBlacklisted(itemID)) then
         return false, 100;
@@ -107,6 +107,12 @@ function ExtVendor_IsItemQuickVendor(link, quality, isSoulbound, alreadyKnown, t
             if (alreadyKnown) then
                 return true, L["QUICKVENDOR_REASON_ALREADYKNOWN"];
             end
+        end
+    end
+
+    if EXTVENDOR_DATA['config']['quickvendor_alreadyknownBoeRecipes'] then
+        if alreadyKnown then
+            return true, L["QUICKVENDOR_REASON_ALREADYKNOWN"];
         end
     end
     -- nothing matched = do not quickvendor

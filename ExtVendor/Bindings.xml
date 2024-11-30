@@ -1,0 +1,5 @@
+<Bindings>
+	<Binding name="EXTENDEDVENDORBIND1" header="EXTENDEDVENDORUI"> ExtVendor_AddToVendorList("wlist") </Binding>
+	<Binding name="EXTENDEDVENDORBIND2"> ExtVendor_AddToVendorList("wlistchar") </Binding>
+	<Binding name="EXTENDEDVENDORBIND3"> ExtVendor_AddToVendorList("blist") </Binding>
+</Bindings>

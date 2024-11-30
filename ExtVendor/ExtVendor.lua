@@ -175,6 +175,7 @@ function ExtVendor_Setup()
     ExtVendor_CheckSetting("filter_purchased_recipes", true);
 
     ExtVendor_CheckSetting("quickvendor_alreadyknown", false);
+    ExtVendor_CheckSetting("quickvendor_alreadyknownBoeRecipes", false);
     ExtVendor_CheckSetting("quickvendor_whitegear", false);
 
     if (EXTVENDOR_DATA['config']['show_load_message']) then
@@ -1311,6 +1312,30 @@ function ExtVendor_CommandHandler(cmd)
         InterfaceOptionsFrame_OpenToCategory(ExtVendorConfigContainer);
     end
 end
+
+function ExtVendor_AddToVendorList(list)
+    local _, link = GameTooltip:GetItem()
+    if GameTooltip:IsShown() and link then
+        local type = {}
+        if list == "wlistchar" then        
+            type.isWhitelist = true
+            type.isLocal = true
+        elseif list == "wlist" then
+            type.isWhitelist = true
+            type.isLocal = false
+        elseif list == "blist" then
+            type.isWhitelist = false
+            type.isLocal = false
+        end
+        ExtVendor_QVConfig_OnItemDrop(type, link)
+    end
+end
+
+_G["BINDING_HEADER_EXTENDEDVENDORUI"] = "ExtendedVendorUI"
+_G["BINDING_NAME_EXTENDEDVENDORBIND1"] = "Add to global white list"
+_G["BINDING_NAME_EXTENDEDVENDORBIND2"] = "Add to character white list "
+_G["BINDING_NAME_EXTENDEDVENDORBIND3"] = "Add to black list"
+
 
 --========================================
 -- Called with pcall to safely catch
